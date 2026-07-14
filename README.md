@@ -56,11 +56,11 @@ railway up
 index.html          หน้าเกมหลัก
 server.js           static file server (Node http ล้วน ไม่มี dependency)
 assets/*.css         สไตล์ (คัดลอกจากของเดิม ไม่ได้แก้)
-src/data/            ค่าคงที่: ป้อม, เวฟ, กาชา, evolve tree
-src/core/            state กลาง, game loop, canvas ref
-src/entities/        Tower, Zombie, Bullet, กระสุนซอมบี้
-src/systems/         wave/gacha/evolve/save/unlock/dev tools ฯลฯ
-src/ui/              popup ต่างๆ, HUD, input handling
-src/render/          ลายป้อม/ซอมบี้/ธีมแมพ (แยกตามสกิน)
+scr/data/            ค่าคงที่: ป้อม, เวฟ, กาชา, evolve tree
+scr/core/            state กลาง, game loop, canvas ref
+scr/entities/        Tower, Zombie, Bullet, กระสุนซอมบี้
+scr/systems/         wave/gacha/evolve/save/unlock/dev tools ฯลฯ
+scr/ui/              popup ต่างๆ, HUD, input handling
+scr/render/          ลายป้อม/ซอมบี้/ธีมแมพ (แยกตามสกิน)
 AUDIT.md             รายงานบั๊กที่เจอจากโค้ดเดิมและวิธีแก้
 ```
