@@ -1,4 +1,4 @@
-// src/render/towerSkins/index.js
+// scr/render/towerSkins/index.js
 import { playerData } from "../../systems/playerData.js";
 import * as base from "./base.js";
 import * as evo1 from "./evo1.js";
