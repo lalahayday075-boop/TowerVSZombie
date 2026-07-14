@@ -1,4 +1,4 @@
-// src/data/gachaPools.js
+// scr/data/gachaPools.js
 export const GACHA_POOLS = {
   money_basic: {
     currency: "money",

@@ -1,4 +1,4 @@
-// src/data/waveConfig.js
+// scr/data/waveConfig.js
 export const ENEMY_BASE = {
   ground_melee: { dmg: 9, hpMul: 16 },
   air_melee: { dmg: 15, hpMul: 8 },
