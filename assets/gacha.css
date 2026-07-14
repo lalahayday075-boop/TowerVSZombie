@@ -15,12 +15,16 @@
   max-width: 380px; /* 🔥 พอดีกับ canvas 400px */
   max-height: 90vh; /* 🔥 ไม่ล้นจอ */
   overflow-y: auto; /* 🔥 ถ้ายาวเกินให้เลื่อน */
-  background: #1b1b1b;
-  border-radius: 16px;
+  background: linear-gradient(180deg, #201f22, #17161a);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 18px;
   padding: 18px;
   color: white;
-  box-shadow: 0 0 25px rgba(0,0,0,0.8);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
 }
+
+.gacha-box::-webkit-scrollbar { width: 6px; }
+.gacha-box::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
 
 /* ===== HEADER ===== */
 .gacha-title {
@@ -173,28 +177,20 @@
   margin-top: 4px;
   color: gold;
 }
-#ui div {
-  margin: 4px 0;
-}
-#gachaBtn {
-  position: fixed;
-  right: 12px;
-  top: 115px;
-
-  padding: 10px 14px;
-  font-size: 14px;
-
-  background: linear-gradient(180deg,#ffcc00,#ff9900);
-  color: #111;
+.gacha-close-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
   border: none;
-  border-radius: 10px;
-
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border-radius: 8px;
+  background: #444;
+  color: #fff;
+  font-weight: bold;
   cursor: pointer;
-  z-index: 30;
 }
 
-#gachaBtn:hover {
-  transform: scale(1.05);
+.gacha-close-btn:hover {
+  background: #555;
 }
 

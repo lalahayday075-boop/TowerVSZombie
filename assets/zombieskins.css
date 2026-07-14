@@ -157,6 +157,10 @@
   font-size: 18px;
 }
 
+.zombie-button-group {
+  margin-top: 12px;
+}
+
 /* Fade anim */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-4px); }

@@ -1,0 +1,262 @@
+/* =========================================================
+   THEME.CSS — ระบบดีไซน์กลางของเกม (สี, ระยะ, เงา, ฟอนต์)
+   ไฟล์นี้คุมโครงหลัก: พื้นหลัง, แถบทรัพยากรบนสุด (HUD),
+   แถบเมนูล่าง (dock) และกรอบพื้นที่เกม
+   ========================================================= */
+
+:root {
+  /* ----- พื้นผิว ----- */
+  --bg-0: #0a0c10;
+  --bg-1: #12151c;
+  --panel-1: #181c24;
+  --panel-2: #10131a;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-soft: rgba(255, 255, 255, 0.05);
+
+  /* ----- สีเน้น ----- */
+  --gold: #ffcf4d;
+  --gold-deep: #ff9d00;
+  --blue: #4aa3ff;
+  --blue-deep: #2d79ff;
+  --cyan: #6af0ff;
+  --purple: #9d6bff;
+  --purple-deep: #7c3aed;
+  --green: #3cff9d;
+  --red: #ff5d5d;
+
+  /* ----- ตัวหนังสือ ----- */
+  --text-0: #f5f6fa;
+  --text-1: #b7bcc8;
+  --text-2: #7d8291;
+
+  /* ----- รูปทรง ----- */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-pill: 999px;
+
+  /* ----- เงา ----- */
+  --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --shadow-2: 0 18px 46px rgba(0, 0, 0, 0.65);
+  --shadow-glow-gold: 0 0 16px rgba(255, 204, 0, 0.35);
+
+  /* ----- ฟอนต์ ----- */
+  --font-game: "Kanit", "Segoe UI", Tahoma, sans-serif;
+
+  /* ----- ระดับชั้น ----- */
+  --z-frame: 5;
+  --z-popup: 20;
+  --z-modal: 60;
+  --z-modal-top: 200;
+
+  /* ----- พื้นที่ปลอดภัย ----- */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ========================================================= */
+/* RESET / BASE */
+/* ========================================================= */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: var(--font-game);
+  background: radial-gradient(circle at 50% -10%, #1a2030 0%, var(--bg-0) 55%, #050608 100%);
+  color: var(--text-0);
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+canvas { user-select: none; touch-action: none; }
+
+button {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ========================================================= */
+/* HUD บนสุด (ทรัพยากร + สถานะด่าน) */
+/* ========================================================= */
+
+#hud {
+  position: relative;
+  z-index: var(--z-frame);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: calc(10px + var(--safe-top)) 12px 10px;
+  background: linear-gradient(180deg, rgba(18, 21, 28, 0.97), rgba(18, 21, 28, 0.86));
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  flex-wrap: wrap;
+}
+
+.hud-resources {
+  display: flex;
+  gap: 8px;
+}
+
+.hud-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2));
+  border: 1px solid var(--line);
+  font-weight: 600;
+  font-size: 13.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.hud-pill--money { color: var(--gold); }
+.hud-pill--diamond { color: var(--cyan); }
+
+.hud-icon { font-size: 14px; }
+
+.hud-wave {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.hud-wave-main {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #201400;
+  font-weight: 800;
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.hud-wave-label { font-size: 11px; opacity: 0.75; }
+.hud-wave-value { font-size: 15px; }
+
+.hud-wave-sub {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-chip {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-1);
+  background: var(--panel-2);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-pill);
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.hud-mode {
+  font-size: 12px;
+  color: var(--purple);
+  font-weight: 700;
+}
+
+/* ========================================================= */
+/* พื้นที่เกม (canvas stage) */
+/* ========================================================= */
+
+#gameStage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding: 10px 10px 0;
+}
+
+#game {
+  background: #15181f;
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  aspect-ratio: 400 / 775;
+  max-height: 100%;
+  border-radius: var(--r-md);
+  box-shadow: 0 0 0 1px var(--line), var(--shadow-1);
+}
+
+/* ========================================================= */
+/* แถบเมนูล่าง (bottom dock) */
+/* ========================================================= */
+
+#bottomDock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-frame);
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  gap: 4px;
+  padding: 6px 8px calc(6px + var(--safe-bottom));
+  background: linear-gradient(0deg, rgba(10, 12, 16, 0.97), rgba(14, 17, 23, 0.9));
+  border-top: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.dock-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 4px;
+  border: none;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--text-1);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.dock-btn:active { transform: scale(0.94); }
+
+.dock-btn:hover {
+  background: var(--line-soft);
+  color: var(--text-0);
+}
+
+.dock-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.dock-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* เน้นปุ่มกาชากับอีโวเล็กน้อยให้รู้สึกพิเศษ */
+#gachaBtn .dock-icon { filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.55)); }
+#evolveBtn .dock-icon { filter: drop-shadow(0 0 6px rgba(157, 107, 255, 0.6)); }
+
+@media (min-width: 480px) {
+  #bottomDock { max-width: 440px; left: 50%; transform: translateX(-50%); right: auto; width: 100%; }
+}

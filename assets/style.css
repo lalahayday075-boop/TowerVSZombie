@@ -118,7 +118,19 @@ body {
 
 /* ===== OVERLAY ===== */
 #towerInspectPopup {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-popup, 20);
+  background: rgba(0, 0, 0, 0.78);
   backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+
+.tower-inspect-panel {
+  margin: 60px auto 24px;
+  padding: 18px;
+  width: 340px;
+  max-width: 90%;
 }
 .popup-hp-bar {
   position: relative;
@@ -184,9 +196,10 @@ body {
 }
 
 /* ===== MAIN PANEL ===== */
-#towerInspectPopup > div {
+.tower-inspect-panel {
   background: linear-gradient(180deg, #222, #151515);
   border: 1px solid #333;
+  border-radius: 16px;
   box-shadow: 0 0 0 1px #000 inset, 0 20px 40px rgba(0,0,0,0.6);
   animation: popupIn 0.18s ease-out;
 }
@@ -341,10 +354,10 @@ body {
 /* ===== DEV PANEL ===== */
 #dev-wrapper {
   position: fixed;
-  top: 50px;
+  top: 64px;
   left: 0;
   width: 100%;
-  z-index: 50;
+  z-index: 55;
   pointer-events: auto;
 }
 
