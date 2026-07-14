@@ -1,4 +1,4 @@
-// src/core/state.js
+// scr/core/state.js
 // รวม state ทั้งหมดของเกมไว้ที่เดียว แทนตัวแปร global ที่กระจายอยู่ใน <script> ของ index.html เดิม
 // เดิม: money, diamonds, wave, towers, zombies ฯลฯ ประกาศลอยๆ ทุกไฟล์แก้ตรงได้หมด
 // ใหม่: import { state } from "./state.js" แล้วแก้ผ่าน object เดียว ลด bug จากชนกันของชื่อตัวแปร

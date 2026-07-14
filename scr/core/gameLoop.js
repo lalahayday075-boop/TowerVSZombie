@@ -1,4 +1,4 @@
-// src/core/gameLoop.js
+// scr/core/gameLoop.js
 import { state, WAVE_TIME_LIMIT } from "./state.js";
 import { canvasRef } from "./canvasRef.js";
 import { devState } from "../systems/devState.js";

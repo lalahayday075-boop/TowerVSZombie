@@ -1,4 +1,4 @@
-// src/core/canvasRef.js
+// scr/core/canvasRef.js
 export const canvasRef = {
   canvas: null,
   ctx: null,
