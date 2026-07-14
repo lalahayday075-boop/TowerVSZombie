@@ -42,6 +42,129 @@
 }
 
 /* =============================
+   PROFILE HEADER
+============================= */
+
+.profile-panel { padding-top: 20px; }
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.profile-avatar {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  background: linear-gradient(145deg, #2a3040, #1a1e28);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+.profile-name-row {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-name-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel .icon-edit-btn {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: #20242e;
+  color: #ddd;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.icon-edit-btn:hover {
+  background: var(--blue, #4aa3ff);
+  border-color: var(--blue, #4aa3ff);
+  transform: scale(1.08);
+}
+
+/* =============================
+   STAT CARDS
+============================= */
+
+.profile-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, #1c212b, #151922);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.stat-card-icon { font-size: 16px; margin-bottom: 2px; }
+
+.stat-card-label {
+  font-size: 11px;
+  color: #8a8f99;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-card-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue, #4aa3ff);
+}
+
+.stat-card-value--small { font-size: 12.5px; }
+
+/* =============================
+   EDIT NAME POPUP
+============================= */
+
+.edit-name-panel {
+  width: 300px;
+}
+
+.edit-name-panel input[type="text"] {
+  margin-top: 0;
+  margin-bottom: 4px;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* =============================
    ROW
 ============================= */
 
