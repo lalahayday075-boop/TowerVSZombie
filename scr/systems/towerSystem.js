@@ -1,4 +1,4 @@
-// src/systems/towerSystem.js
+// scr/systems/towerSystem.js
 import { state } from "../core/state.js";
 import { TOWER_TYPES, MAX_TOWER_LEVEL } from "../data/towerTypes.js";
 import { Tower } from "../entities/Tower.js";

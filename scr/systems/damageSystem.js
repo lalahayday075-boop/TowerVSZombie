@@ -1,4 +1,4 @@
-// src/systems/damageSystem.js
+// scr/systems/damageSystem.js
 import { state } from "../core/state.js";
 import { playerData, savePlayerData } from "./playerData.js";
 

@@ -1,4 +1,4 @@
-// src/systems/waveScaling.js
+// scr/systems/waveScaling.js
 import { ENEMY_BASE, REWARD_TABLE } from "../data/waveConfig.js";
 
 export function calcSpeed(base, wave, scale, max) {

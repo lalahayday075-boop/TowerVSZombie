@@ -1,4 +1,4 @@
-// src/systems/bloodSystem.js
+// scr/systems/bloodSystem.js
 const bloodParticles = [];
 const bloodStains = [];
 

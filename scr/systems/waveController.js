@@ -1,4 +1,4 @@
-// src/systems/waveController.js
+// scr/systems/waveController.js
 import { state, WAVE_TIME_LIMIT } from "../core/state.js";
 import { playerData } from "./playerData.js";
 import { generateWave, shuffleArray } from "./waveGenerator.js";

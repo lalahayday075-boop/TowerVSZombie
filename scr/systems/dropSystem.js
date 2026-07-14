@@ -1,4 +1,4 @@
-// src/systems/dropSystem.js
+// scr/systems/dropSystem.js
 export function rollDiamondDrop(isBoss) {
   const r = Math.random() * 100;
   if (!isBoss) {

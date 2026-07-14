@@ -1,4 +1,4 @@
-// src/systems/waveGenerator.js
+// scr/systems/waveGenerator.js
 import { calcSpeed, countByWave, getEnemyStats } from "./waveScaling.js";
 
 export function generateWave(wave) {

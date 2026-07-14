@@ -1,4 +1,4 @@
-// src/systems/zombieRuntime.js
+// scr/systems/zombieRuntime.js
 import { state } from "../core/state.js";
 import { canvasRef } from "../core/canvasRef.js";
 import { playerData } from "./playerData.js";

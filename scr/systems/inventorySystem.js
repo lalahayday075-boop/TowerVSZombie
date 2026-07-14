@@ -1,4 +1,4 @@
-// src/systems/inventorySystem.js
+// scr/systems/inventorySystem.js
 import { state } from "../core/state.js";
 import { TOWER_TYPES } from "../data/towerTypes.js";
 
