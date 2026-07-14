@@ -1,4 +1,4 @@
-// src/ui/towerPreview.js
+// scr/ui/towerPreview.js
 import { Tower } from "../entities/Tower.js";
 import { TOWER_DRAW_REGISTRY } from "../render/towerSkins/index.js";
 

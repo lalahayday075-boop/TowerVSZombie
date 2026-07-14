@@ -1,4 +1,4 @@
-// src/ui/zombieSkinUI.js
+// scr/ui/zombieSkinUI.js
 import { playerData } from "../systems/playerData.js";
 import { ZOMBIE_TYPES, ZOMBIE_SKIN_AVAILABILITY, equipZombieSkin } from "../systems/unlockSystem.js";
 

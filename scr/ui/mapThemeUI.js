@@ -1,4 +1,4 @@
-// src/ui/mapThemeUI.js
+// scr/ui/mapThemeUI.js
 import { playerData } from "../systems/playerData.js";
 import { MAP_THEMES } from "../render/mapThemes.js";
 import { equipMapTheme } from "../systems/unlockSystem.js";

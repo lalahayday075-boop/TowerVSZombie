@@ -1,4 +1,4 @@
-// src/ui/towerPopupUI.js
+// scr/ui/towerPopupUI.js
 import { state } from "../core/state.js";
 import { TOWER_TYPES, MAX_TOWER_LEVEL } from "../data/towerTypes.js";
 import { playerData, savePlayerData } from "../systems/playerData.js";

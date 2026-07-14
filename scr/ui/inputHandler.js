@@ -1,4 +1,4 @@
-// src/ui/inputHandler.js
+// scr/ui/inputHandler.js
 import { state } from "../core/state.js";
 import { openTowerInspect } from "./towerPopupUI.js";
 import { openTowerPopup } from "./towerPopupUI.js";

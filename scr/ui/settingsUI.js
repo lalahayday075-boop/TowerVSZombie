@@ -1,4 +1,4 @@
-// src/ui/settingsUI.js
+// scr/ui/settingsUI.js
 import { playerData, savePlayerData } from "../systems/playerData.js";
 
 export function createSettingsPage() {

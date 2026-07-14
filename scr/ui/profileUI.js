@@ -1,4 +1,4 @@
-// src/ui/profileUI.js
+// scr/ui/profileUI.js
 import { state } from "../core/state.js";
 import { playerData, savePlayerData } from "../systems/playerData.js";
 import { openMapThemePage } from "./mapThemeUI.js";

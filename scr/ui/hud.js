@@ -1,4 +1,4 @@
-// src/ui/hud.js
+// scr/ui/hud.js
 import { state } from "../core/state.js";
 
 let els = null;

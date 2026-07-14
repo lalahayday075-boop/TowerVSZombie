@@ -1,4 +1,4 @@
-// src/ui/gachaUI.js
+// scr/ui/gachaUI.js
 import { state } from "../core/state.js";
 import { GACHA_POOLS } from "../data/gachaPools.js";
 import { TOWER_TYPES } from "../data/towerTypes.js";
