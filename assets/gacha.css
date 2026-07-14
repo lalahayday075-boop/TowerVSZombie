@@ -1,0 +1,200 @@
+/* ===== GACHA OVERLAY ===== */
+.gacha-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== MAIN BOX ===== */
+.gacha-box {
+  width: 95%;
+  max-width: 380px; /* 🔥 พอดีกับ canvas 400px */
+  max-height: 90vh; /* 🔥 ไม่ล้นจอ */
+  overflow-y: auto; /* 🔥 ถ้ายาวเกินให้เลื่อน */
+  background: #1b1b1b;
+  border-radius: 16px;
+  padding: 18px;
+  color: white;
+  box-shadow: 0 0 25px rgba(0,0,0,0.8);
+}
+
+/* ===== HEADER ===== */
+.gacha-title {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.gacha-currency {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+/* ===== GRID LAYOUT (2 คอลัมน์) ===== */
+.gacha-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 🔥 2 ช่อง */
+  gap: 10px;
+}
+
+/* ===== CARD ===== */
+.gacha-card {
+  background: #232323;
+  border-radius: 12px;
+  padding: 10px;
+  font-size: 13px;
+  border: 1px solid #333;
+}
+
+.gacha-card h3 {
+  font-size: 13px;
+  margin: 0 0 6px 0;
+}
+
+/* ===== BUTTON ===== */
+.gacha-btn {
+  width: 100%;
+  padding: 6px;
+  border-radius: 8px;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.money-btn {
+  background: #ffc107;
+  color: black;
+}
+
+.diamond-btn {
+  background: #4dabff;
+  color: white;
+}
+
+.gacha-close {
+  margin-top: 10px;
+  background: #444;
+  color: white;
+}
+.gacha-card {
+  position: relative;
+}
+
+.gacha-info-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  background: #ffcc00;
+  color: #000;
+  font-weight: bold;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 22px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.gacha-info-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.gacha-info-box {
+  background: #1b1b1b;
+  padding: 16px;
+  border-radius: 12px;
+  max-height: 85vh;
+  overflow-y: auto;
+  width: 95%;
+  max-width: 700px;  /* ✅ จำกัดเฉพาะจอใหญ่ */
+  color: white;
+}
+
+.gacha-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .gacha-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.gacha-info-card {
+  display: flex;
+  justify-content: space-between;
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 8px;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap; /* 🔥 กันข้อความยาวดันล้น */
+}
+
+.gacha-info-left {
+  font-size: 13px;
+}
+
+.gacha-preview {
+  background: #111;
+  border-radius: 8px;
+}
+.gacha-showcase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.gacha-main-preview {
+  background: #111;
+  border-radius: 12px;
+}
+
+.gacha-best-label {
+  font-size: 12px;
+  margin-top: 4px;
+  color: gold;
+}
+#ui div {
+  margin: 4px 0;
+}
+#gachaBtn {
+  position: fixed;
+  right: 12px;
+  top: 115px;
+
+  padding: 10px 14px;
+  font-size: 14px;
+
+  background: linear-gradient(180deg,#ffcc00,#ff9900);
+  color: #111;
+  border: none;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  cursor: pointer;
+  z-index: 30;
+}
+
+#gachaBtn:hover {
+  transform: scale(1.05);
+}
+

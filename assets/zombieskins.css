@@ -1,0 +1,164 @@
+#zombieSkinPage {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.7), rgba(0,0,0,0.9));
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+
+#zombieSkinPage .zombie-panel {
+  background: linear-gradient(145deg, #1e1e24, #2a2a33);
+  color: #fff;
+  padding: 24px;
+  border-radius: 18px;
+  width: 440px;
+  height: 560px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 15px 40px rgba(0,0,0,0.6);
+}
+
+#zombieSkinPage h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg,#6af0ff,#7c6aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Scroll */
+.zombie-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.zombie-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.zombie-scroll-area::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+/* Type block */
+.zombie-type-block {
+  margin-bottom: 12px;
+}
+
+/* Header */
+.zombie-type-header {
+  cursor: pointer;
+  background: linear-gradient(90deg,#2c2c36,#24242c);
+  padding: 10px 12px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.zombie-type-header:hover {
+  background: linear-gradient(90deg,#343444,#2d2d38);
+}
+
+.zombie-type-header .arrow {
+  width: 0;
+  height: 0;
+  border-left: 6px solid #aaa;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  transition: transform 0.2s ease;
+}
+
+.zombie-type-header.open .arrow {
+  transform: rotate(90deg);
+}
+
+/* Content */
+.zombie-type-content {
+  display: none;
+  padding: 8px 4px;
+}
+
+.zombie-type-content.open {
+  display: block;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+/* Row card */
+.zombie-row {
+  background: #2a2a34;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin: 6px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.15s;
+}
+
+.zombie-row:hover {
+  background: #323240;
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(90deg,#6af0ff,#7c6aff);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background: #444;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #555;
+}
+
+/* Equipped state */
+.btn-primary:disabled {
+  background: #00ffae;
+  color: #000;
+  cursor: default;
+}
+
+/* Lock */
+.zombie-row span {
+  font-size: 18px;
+}
+
+/* Fade anim */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
