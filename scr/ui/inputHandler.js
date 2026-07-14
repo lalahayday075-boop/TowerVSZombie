@@ -8,8 +8,12 @@ const CLICK_RADIUS = 28;
 export function initInputHandler(canvas) {
   canvas.addEventListener("click", e => {
     const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+    // canvas อาจถูกย่อ/ขยายด้วย CSS ให้พอดีจอ (responsive) ทำให้ขนาดที่แสดงผล (rect)
+    // ไม่เท่ากับความละเอียดจริงของ canvas (canvas.width/height) จึงต้องแปลงสัดส่วนกลับ
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
 
     const candidates = state.zombies.filter(z => {
       if (z.hp <= 0 || z.dead) return false;

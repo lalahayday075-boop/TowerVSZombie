@@ -32,13 +32,18 @@ export function closeMapThemePage() {
 export function renderMapThemeList() {
   const container = document.getElementById("mapThemeList");
   container.innerHTML = "";
+  container.className = "map-theme-grid";
 
   MAP_THEMES.forEach(theme => {
     const owned = playerData.mapTheme.owned.includes(theme);
     const equipped = playerData.mapTheme.equipped === theme;
 
     const btn = document.createElement("button");
-    btn.textContent = theme.toUpperCase() + (equipped ? " ✅" : "") + (!owned ? " 🔒" : "");
+    btn.className = "map-theme-btn" + (equipped ? " equipped" : "") + (!owned ? " locked" : "");
+    btn.innerHTML = `
+      <span class="map-theme-name">${theme.toUpperCase()}</span>
+      <span class="map-theme-state">${equipped ? "✔ ใช้อยู่" : !owned ? "🔒 ล็อค" : "ใช้"}</span>
+    `;
     btn.disabled = !owned;
     btn.onclick = () => {
       equipMapTheme(theme);
