@@ -14,18 +14,6 @@
   document.addEventListener("gesturechange", e => e.preventDefault());
   document.addEventListener("gestureend", e => e.preventDefault());
 
-  // ห้ามซูมด้วยการแตะสองครั้งติดกัน (double-tap zoom)
-  let lastTouchEnd = 0;
-  document.addEventListener(
-    "touchend",
-    e => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) e.preventDefault();
-      lastTouchEnd = now;
-    },
-    { passive: false }
-  );
-
   // ห้ามซูมด้วย ctrl+scroll wheel (เผื่อทดสอบบนเดสก์ท็อป)
   document.addEventListener(
     "wheel",
