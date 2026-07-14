@@ -1,4 +1,4 @@
-// src/entities/Tower.js
+// scr/entities/Tower.js
 import { state } from "../core/state.js";
 import { TOWER_TYPES, TOWER_MUZZLE, MAX_TOWER_LEVEL } from "../data/towerTypes.js";
 import { TOWER_DRAW_REGISTRY } from "../render/towerSkins/index.js";

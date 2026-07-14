@@ -1,4 +1,4 @@
-// src/entities/Bullet.js
+// scr/entities/Bullet.js
 import { state } from "../core/state.js";
 import { spawnDamage } from "../systems/damageSystem.js";
 import { spawnBlood } from "../systems/bloodSystem.js";

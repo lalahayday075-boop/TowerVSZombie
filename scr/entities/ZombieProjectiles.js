@@ -1,4 +1,4 @@
-// src/entities/ZombieProjectiles.js
+// scr/entities/ZombieProjectiles.js
 import { state } from "../core/state.js";
 import { devState } from "../systems/devState.js";
 import { spawnDamage } from "../systems/damageSystem.js";

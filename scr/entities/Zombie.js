@@ -1,4 +1,4 @@
-// src/entities/Zombie.js
+// scr/entities/Zombie.js
 import { state, makeMapConfig } from "../core/state.js";
 import { devState } from "../systems/devState.js";
 import { spawnDamage } from "../systems/damageSystem.js";
