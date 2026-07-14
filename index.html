@@ -2,41 +2,52 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Tower vs Zombie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/theme.css" />
 <link rel="stylesheet" href="assets/style.css" />
 <link rel="stylesheet" href="assets/gacha.css" />
 <link rel="stylesheet" href="assets/evolve.css" />
 <link rel="stylesheet" href="assets/player.css" />
 <link rel="stylesheet" href="assets/zombieskins.css" />
-<style>
-  body { margin: 0; background: #111; color: #fff; font-family: sans-serif; }
-  body { user-select: none; -webkit-user-select: none; -ms-user-select: none;
-         -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
-  canvas { user-select: none; touch-action: none; }
-  #ui { padding: 8px; background: #222; text-align: center; }
-  #game { background: #333; display: block; margin: auto; }
-  button { padding: 6px 10px; }
-</style>
 </head>
 <body>
 
-<button id="gachaBtn">🎰 กาชา</button>
-<button id="profileBtn">👤 โปรไฟล์</button>
-<button id="setBtn">⚙ ตั้งค่า</button>
+<!-- ===== HUD บนสุด ===== -->
+<header id="hud">
+  <div class="hud-resources">
+    <div class="hud-pill hud-pill--money"><span class="hud-icon">💰</span><span id="money">100</span></div>
+    <div class="hud-pill hud-pill--diamond"><span class="hud-icon">💎</span><span id="diamond">0</span></div>
+  </div>
+  <div class="hud-wave">
+    <div class="hud-wave-main">
+      <span class="hud-wave-label">ด่าน</span><span id="wave" class="hud-wave-value">1</span>
+    </div>
+    <div class="hud-wave-sub">
+      <span class="hud-chip">⏱ <span id="time">60</span>s</span>
+      <span class="hud-chip">🧟 <span id="zombieLeft">0</span></span>
+      <span id="mode" class="hud-mode"></span>
+    </div>
+  </div>
+</header>
 
-<div id="ui">
-  <div>
-    💰 เงิน: <span id="money">100</span>
-    | 💎 เพชร: <span id="diamond">0</span>
-  </div>
-  <div>
-    ด่าน: <span id="wave">1</span>
-    | เวลา: <span id="time">60</span>s
-    |🧟 เหลือ: <span id="zombieLeft">0</span>
-    <span id="mode"></span>
-  </div>
+<!-- ===== พื้นที่เกม ===== -->
+<div id="gameStage">
+  <canvas id="game" width="400" height="775"></canvas>
 </div>
 
+<!-- ===== แถบเมนูล่าง ===== -->
+<nav id="bottomDock">
+  <button id="gachaBtn" class="dock-btn"><span class="dock-icon">🎰</span><span class="dock-label">กาชา</span></button>
+  <button id="evolveBtn" class="dock-btn"><span class="dock-icon">🧬</span><span class="dock-label">อีโว</span></button>
+  <button id="profileBtn" class="dock-btn"><span class="dock-icon">👤</span><span class="dock-label">โปรไฟล์</span></button>
+  <button id="setBtn" class="dock-btn"><span class="dock-icon">⚙️</span><span class="dock-label">ตั้งค่า</span></button>
+</nav>
+
+<!-- ===== เลือกป้อม (ตอนวางป้อมใหม่) ===== -->
 <div id="towerPopup">
   <div class="tower-popup-panel">
     <h3>เลือกป้อม</h3>
@@ -45,21 +56,20 @@
   </div>
 </div>
 
-<div id="towerInspectPopup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:20;">
-  <div style="background:#1e1e1e;margin:80px auto;padding:14px;width:320px;border-radius:10px;">
+<!-- ===== ตรวจสอบ/อัปเกรดป้อม ===== -->
+<div id="towerInspectPopup" style="display:none;">
+  <div class="tower-inspect-panel">
     <h3 id="inspectTitle">Tower</h3>
     <div id="inspectStats"></div>
   </div>
 </div>
 
-<button id="evolveBtn">🧬 อีโว</button>
-
+<!-- ===== กาชา ===== -->
 <div id="gachaPage" class="gacha-overlay">
   <div id="gachaContainer" class="gacha-box"></div>
 </div>
 
-<canvas id="game" width="400" height="775"></canvas>
-
 <script type="module" src="scr/main.js"></script>
+<script src="scr/core/canvasResize.js"></script>
 </body>
 </html>
