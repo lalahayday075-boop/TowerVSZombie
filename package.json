@@ -1,0 +1,12 @@
+{
+  "name": "tower-vs-zombie",
+  "version": "1.0.0",
+  "description": "Tower Defense vs Zombie - client-side game, served as static files",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
