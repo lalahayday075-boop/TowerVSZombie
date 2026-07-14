@@ -1,4 +1,4 @@
-// src/main.js
+// scr/main.js
 import { state, buildSlotLayout } from "./core/state.js";
 import { setCanvas, canvasRef } from "./core/canvasRef.js";
 import { setZombieMapConfig } from "./entities/Zombie.js";
