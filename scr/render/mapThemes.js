@@ -1,4 +1,4 @@
-// src/render/mapThemes.js
+// scr/render/mapThemes.js
 import { playerData } from "../systems/playerData.js";
 import { canvasRef } from "../core/canvasRef.js";
 
