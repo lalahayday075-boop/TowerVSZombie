@@ -60,4 +60,21 @@
     },
     { passive: false }
   );
+  // กัน iOS Safari เลื่อน "visual viewport" ไปเองตอนโฟกัสช่อง input (เช่น ชื่อผู้เล่น/PIN ตอนล็อกอิน
+  // หรือช่อง rename ในหน้าโปรไฟล์) แล้วคีย์บอร์ดเด้งขึ้น-ลง — Safari จะเลื่อนจอตามตำแหน่ง cursor ให้เอง
+  // โดยไม่ผ่าน touchmove event เลย (preventDefault ด้านบนเลยดักไม่ได้) พอคีย์บอร์ดปิด บางทีจอไม่เลื่อนกลับ
+  // (ค้างเห็นแค่ตัวเกม มองไม่เห็น HUD บนสุด) เพราะหน้าเราตั้งใจให้ไม่มี scroll จริงอยู่แล้ว (body: overflow
+  // hidden + position fixed) เลยเลื่อนกลับเป็น (0,0) ทุกครั้งที่ตรวจพบว่ามันขยับ/คีย์บอร์ดโผล่-หาย ปลอดภัย
+  // เพราะหน้านี้ไม่มีที่ไหนตั้งใจให้ window เลื่อนจริงๆ (ส่วนที่อยากให้เลื่อนได้คือ SCROLLABLE_SELECTOR ด้านบน
+  // ซึ่งเป็น overflow ภายใน element ของมันเอง ไม่เกี่ยวกับ window scroll ตรงนี้)
+  function resetPageScroll() {
+    if (window.scrollX !== 0 || window.scrollY !== 0) window.scrollTo(0, 0);
+  }
+  window.addEventListener("scroll", resetPageScroll, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", resetPageScroll);
+    window.visualViewport.addEventListener("scroll", resetPageScroll);
+  }
+  // ตอนออกจากช่อง input (คีย์บอร์ดกำลังจะปิด) ก็เผื่อรีเซ็ตอีกรอบหลังคีย์บอร์ดหายไปจริงๆ
+  document.addEventListener("focusout", () => setTimeout(resetPageScroll, 300));
 })();
