@@ -317,6 +317,72 @@
 }
 
 /* =============================
+   LOGIN SCREEN
+============================= */
+
+.login-overlay {
+  z-index: 200; /* ต้องอยู่บนสุดเสมอ เพราะเกมยังเริ่มไม่ได้จนกว่าจะล็อกอิน */
+  background: var(--bg-0, #0a0c10);
+  backdrop-filter: none;
+}
+
+.login-panel {
+  margin-top: 120px;
+}
+
+.login-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: #111;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.login-tab-btn {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #8a8f99;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s ease;
+  margin-top: 0;
+}
+
+.login-tab-btn.active {
+  background: linear-gradient(135deg,#4aa3ff,#2d79ff);
+  color: #fff;
+}
+
+.panel input[type="password"] {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+  outline: none;
+  transition: 0.2s;
+}
+
+.panel input[type="password"]:focus {
+  border-color: #4aa3ff;
+  box-shadow: 0 0 0 2px rgba(74,163,255,0.2);
+}
+
+.login-error {
+  min-height: 18px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--red, #ff5d5d);
+  text-align: center;
+}
+
+/* =============================
    ANIMATION
 ============================= */
 
