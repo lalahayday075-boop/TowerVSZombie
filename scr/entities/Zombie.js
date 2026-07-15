@@ -12,12 +12,17 @@ export function setZombieMapConfig(canvas) {
 }
 
 export class Zombie {
-  constructor(type, hp, speed, damage, reward, isBoss = false, attackMode = "melee", armor = 0) {
+  constructor(type, hp, speed, damage, reward, isBoss = false, attackMode = "melee", armor = 0, groupIndex = null) {
     this.type = type;
     this.moveType = type;
     this.isBoss = isBoss;
     this.dead = false;
     this.armor = armor; // ลดดาเมจที่ได้รับจากป้อมแบบ flat ต่อนัด (ดู Bullet.js) — กลไกใหม่สำหรับ hardcore
+
+    // index ของกลุ่มศัตรูใน active_wave.enemies ฝั่ง server (ดู scr/systems/waveController.js)
+    // ใช้ตอนตายจริงเพื่อขอเครดิตเงิน/เพชร/exp จาก /wave/kill ให้ตรงกับกลุ่มที่ server ออกให้
+    // null = ซอมบี้ที่มาจาก dev tool เท่านั้น (ไม่ผูกกับเวฟจริงบน server)
+    this.groupIndex = groupIndex;
 
     this.x = 180 + (Math.random() * 100 - 50);
     this.y = -20;
