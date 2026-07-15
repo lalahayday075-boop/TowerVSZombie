@@ -23,8 +23,8 @@ export function applyFullGameData(data, onApplied) {
   if (!data) return;
 
   if (data.playerData) setPlayerData(data.playerData);
-  if (typeof data.money === "number") state.money = data.money;
-  if (typeof data.diamonds === "number") state.diamonds = data.diamonds;
+  if (typeof data.money === "number") { state.money = data.money; state.confirmedMoney = data.money; }
+  if (typeof data.diamonds === "number") { state.diamonds = data.diamonds; state.confirmedDiamonds = data.diamonds; }
   if (typeof data.wave === "number") state.wave = data.wave;
   state.totalPlayTime = data.totalPlayTime || 0;
   state.totalZombiesKilled = data.totalZombiesKilled || 0;

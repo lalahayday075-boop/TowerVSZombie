@@ -3,7 +3,8 @@ import { state } from "../core/state.js";
 import { playerData, savePlayerData } from "./playerData.js";
 import { SKIN_DATABASE } from "../render/towerSkins/index.js";
 import { MAP_THEMES } from "../render/mapThemes.js";
-import { saveGame } from "./saveSystem.js";
+import { saveGame, applyFullGameData } from "./saveSystem.js";
+import { api } from "./api.js";
 
 export function unlockSkin(type, skin) {
   if (!playerData.skins.unlocked[type]) playerData.skins.unlocked[type] = ["default"];
@@ -66,10 +67,28 @@ export function checkMapUnlock() {
   if (state.totalZombiesKilled >= 1500) unlockMapTheme("lava");
 }
 
-export function equipMapTheme(themeName) {
+// สำคัญ: เกมนี้เป็น server-authoritative แล้ว ทุกครั้งที่เปิดเกมใหม่ค่า playerData
+// ทั้งก้อนจะถูกเขียนทับด้วยข้อมูลจาก /api/state เสมอ (ดู main.js -> applyFullGameData(serverState))
+// ถ้าอัปเดตแค่ playerData ในเครื่อง (savePlayerData/saveGame ที่เซฟลง localStorage อย่างเดียว)
+// โดยไม่ยิง API ไปเก็บที่ฝั่ง server ด้วย พอโหลดหน้าใหม่ค่าที่เพิ่งเลือกจะหายและถูกรีเซ็ตกลับเป็น
+// default ทุกครั้ง (นี่คือสาเหตุของบั๊ก "เลือกสกินแล้วออกเข้าใหม่มันรีเซ็ต")
+// จึงต้องยิง api.equipMapTheme() ไปบันทึกที่ฝั่ง server ทุกครั้งที่ผู้เล่นเปลี่ยนธีมแมพ
+export async function equipMapTheme(themeName) {
   if (!playerData.mapTheme.owned.includes(themeName)) return;
-  playerData.mapTheme.equipped = themeName;
+
+  const prevEquipped = playerData.mapTheme.equipped;
+  playerData.mapTheme.equipped = themeName; // อัปเดตทันทีให้ UI ตอบสนองไว (optimistic)
   savePlayerData();
+
+  try {
+    const res = await api.equipMapTheme(themeName);
+    applyFullGameData(res.state); // sync ให้ตรงกับของจริงบน server เสมอ
+    saveGame();
+  } catch (err) {
+    playerData.mapTheme.equipped = prevEquipped; // ยิงไม่สำเร็จ ย้อนกลับค่าเดิม
+    savePlayerData();
+    console.error("[equipMapTheme] บันทึกธีมแมพไม่สำเร็จ:", err);
+  }
 }
 
 // ประเภทซอมบี้ที่มีอยู่จริง (ตรงกับ zombieSkins/index.js)
@@ -100,8 +119,20 @@ export function checkZombieSkinUnlock() {
   if (state.totalZombiesKilled >= 1) unlockZombieSkin("Songkran");
 }
 
-export function equipZombieSkin(type, name) {
+export async function equipZombieSkin(type, name) {
   if (!playerData.zombieSkin.owned[type]?.includes(name)) return;
-  playerData.zombieSkin.equipped[type] = name;
+
+  const prevEquipped = playerData.zombieSkin.equipped[type];
+  playerData.zombieSkin.equipped[type] = name; // optimistic update
   saveGame();
+
+  try {
+    const res = await api.equipZombieSkin(type, name);
+    applyFullGameData(res.state); // sync ให้ตรงกับของจริงบน server เสมอ
+    saveGame();
+  } catch (err) {
+    playerData.zombieSkin.equipped[type] = prevEquipped;
+    saveGame();
+    console.error("[equipZombieSkin] บันทึกสกินซอมบี้ไม่สำเร็จ:", err);
+  }
 }
