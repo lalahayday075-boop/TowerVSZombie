@@ -9,10 +9,10 @@ import { Zombie } from "../entities/Zombie.js";
 import { updateZombieUI, updateUI } from "../ui/hud.js";
 import { canvasRef } from "../core/canvasRef.js";
 
-// ตัวเลขเงิน/เพชรที่โชว์ระหว่างเล่น "ไม่ใช่ของจริง" — เป็นแค่ preview ให้ผู้เล่นรู้สึกลื่นไหลระหว่างต่อสู้
-// (คำนวณด้วยสูตรเดียวกับ server เพื่อให้ตัวเลขระหว่างเล่นใกล้เคียงของจริงที่สุด)
-// พอจบเวฟจริง ค่าที่ server ส่งกลับมาจาก /wave/complete จะ "เขียนทับ" ให้ตรงเป๊ะเสมอ (reconcile)
-// ป้องกันไม่ให้ใครแก้ค่าฝั่ง client แล้วได้เงินจริงเกินสิทธิ์
+// เงิน/เพชร/exp ที่ได้ระหว่างเล่นเป็นของจริงทันทีที่ฆ่าซอมบี้แต่ละตัว (ไม่ใช่แค่ preview รอจบเวฟอีกต่อไป)
+// ทุกครั้งที่ซอมบี้ตาย client จะยิง /wave/kill ไปให้ server เป็นคนคำนวณ+บันทึกเงินจริงทันที (ดู scr/systems/zombieRuntime.js)
+// ดังนั้นไม่ว่าเวฟนี้จะจบด้วยการชนะหรือแพ้ เงินที่ฆ่าได้ระหว่างทางก็ยังเป็นของผู้เล่นอยู่ ไม่หายไปไหน
+// /wave/complete ตอนนี้แค่ "เก็บตก" ให้กลุ่มที่ยังไม่ได้เครดิต (เช่นปุ่ม dev "ชนะเวฟทันที") แล้วเลื่อนเวฟถัดไป
 
 export async function failWave(onDone) {
   if (state.isGameOver) return;
@@ -95,8 +95,8 @@ export async function spawnWave() {
   updateZombieUI();
 
   const queue = [];
-  enemies.forEach(e => {
-    for (let i = 0; i < e.count; i++) queue.push({ ...e });
+  enemies.forEach((e, groupIndex) => {
+    for (let i = 0; i < e.count; i++) queue.push({ ...e, groupIndex });
   });
   shuffleArray(queue);
 
@@ -108,10 +108,10 @@ export async function spawnWave() {
       return;
     }
     const e = queue[index++];
-    // reward เป็นแค่ preview ฝั่ง client (ดูหมายเหตุด้านบนของไฟล์)
+    // reward ตรงนี้ใช้แค่โชว์ตัวเลขตอนสร้างซอมบี้เฉยๆ เงินจริงจะมาจาก server ตอนตายจริง (ดู zombieRuntime.js)
     const reward = calcRewardByWave(e.rewardWave ?? data.wave, e.rewardIsBoss ?? false);
 
-    state.zombies.push(new Zombie(e.type, e.hp, e.speed, e.damage, reward, e.isBoss || false, e.attackMode || "melee", e.armor || 0));
+    state.zombies.push(new Zombie(e.type, e.hp, e.speed, e.damage, reward, e.isBoss || false, e.attackMode || "melee", e.armor || 0, e.groupIndex));
 
     const delay = baseDelay * (0.4 + Math.random() * 0.8) * 900;
     state.spawnTimer = setTimeout(spawnNext, delay);
