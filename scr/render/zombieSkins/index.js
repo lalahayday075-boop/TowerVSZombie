@@ -1,4 +1,4 @@
-// scr/render/zombieSkins/index.js
+// src/render/zombieSkins/index.js
 import { playerData } from "../../systems/playerData.js";
 import * as base from "./base.js";
 import * as songkran from "./songkran.js";
