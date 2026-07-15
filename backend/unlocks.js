@@ -1,8 +1,8 @@
 // backend/unlocks.js
 import { pool } from "./db/pool.js";
-import { SKIN_DATABASE } from "../src/render/towerSkins/index.js";
-import { MAP_THEMES } from "../src/render/mapThemes.js";
-import { ZOMBIE_SKIN_AVAILABILITY, ZOMBIE_TYPES } from "../src/systems/unlockSystem.js";
+import { SKIN_DATABASE } from "../scr/render/towerSkins/index.js";
+import { MAP_THEMES } from "../scr/render/mapThemes.js";
+import { ZOMBIE_SKIN_AVAILABILITY, ZOMBIE_TYPES } from "../scr/systems/unlockSystem.js";
 
 export function computeUnlockedTowerSkins(row) {
   const unlocked = row.skins?.unlocked || {};
