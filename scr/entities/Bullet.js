@@ -1,11 +1,11 @@
-// scr/entities/Bullet.js
+// src/entities/Bullet.js
 import { state } from "../core/state.js";
 import { spawnDamage } from "../systems/damageSystem.js";
 import { spawnBlood } from "../systems/bloodSystem.js";
 import { applyElectricEffect } from "./Zombie.js";
 
 export class Bullet {
-  constructor(x, y, target, damage, color, radius = 2.5, critChance = 0, critDamage = 2) {
+  constructor(x, y, target, damage, color, radius = 2.5, critChance = 0, critDamage = 2, executeBonus = 0) {
     this.x = x; this.y = y;
     this.target = target;
     this.baseDamage = damage;
@@ -16,6 +16,7 @@ export class Bullet {
     this.radius = radius;
     this.critChance = critChance;
     this.critDamage = critDamage;
+    this.executeBonus = executeBonus; // ป้อม executioner: โบนัสดาเมจใส่ศัตรูเลือดต่ำ (ดูด้านล่าง)
   }
 
   update() {
@@ -33,6 +34,17 @@ export class Bullet {
       let finalDamage = this.damage;
       let isCrit = false;
       if (Math.random() < this.critChance) { finalDamage *= this.critDamage; isCrit = true; }
+
+      // execute bonus: คิดก่อนหักเกราะ (โบนัส %เลือดต่ำ ควรช่วยเจาะเกราะได้ด้วยถึงจะใช้ปิดจ๊อบบอสได้จริง)
+      if (this.executeBonus > 0 && this.target.hp / this.target.maxHp <= 0.2) {
+        finalDamage *= (1 + this.executeBonus);
+      }
+
+      // armor: ลดดาเมจแบบ flat หลัง crit/execute (ให้คริทเป็นตัวเจาะเกราะจริงจัง สมกับ hardcore)
+      // พื้นดาเมจขั้นต่ำ 1 กันป้อมอ่อนแอโดนเกราะบล็อกจนทำอะไรไม่ได้เลย
+      if (this.target.armor > 0) {
+        finalDamage = Math.max(1, finalDamage - this.target.armor);
+      }
 
       this.target.hp -= finalDamage;
       if (this.target.hp <= 0 && state.focusedZombie === this.target) state.focusedZombie = null;
@@ -75,12 +87,17 @@ export class LightningBullet {
   applyChain(target) {
     if (!target || this.chainLeft < 0) return;
 
-    target.hp -= this.damage;
+    // chain lightning หักเกราะแค่ครึ่งเดียว (ไม่งั้นซอมบี้เกราะหนากลายเป็นด่านที่ป้อมสายชนโดนบล็อกสนิท
+    // ทั้งที่จุดเด่นของสายชนคือกวาดหลายตัว ไม่ใช่เจาะเกราะ — งั้นก็ให้พอไหวแต่ไม่คุ้มสุด)
+    let dmg = this.damage;
+    if (target.armor > 0) dmg = Math.max(1, dmg - target.armor * 0.5);
+
+    target.hp -= dmg;
     if (target.hp <= 0 && state.focusedZombie === target) state.focusedZombie = null;
     if (target.hp < 0) target.hp = 0;
 
     if (target.hp > 0) {
-      spawnDamage(target.x, target.y, this.damage, "zombie");
+      spawnDamage(target.x, target.y, Math.floor(dmg), "zombie");
     }
     applyElectricEffect(target, this.color);
     if (target.hp < 0) target.hp = 0;

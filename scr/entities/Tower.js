@@ -1,4 +1,4 @@
-// scr/entities/Tower.js
+// src/entities/Tower.js
 import { state } from "../core/state.js";
 import { TOWER_TYPES, TOWER_MUZZLE, MAX_TOWER_LEVEL } from "../data/towerTypes.js";
 import { TOWER_DRAW_REGISTRY } from "../render/towerSkins/index.js";
@@ -78,6 +78,7 @@ export class Tower {
 
     this.critChance = cfg.critChance || 0.05;
     this.critDamage = cfg.critDamage || 2.0;
+    this.executeBonus = cfg.executeBonus || 0; // ป้อม executioner: โบนัสดาเมจใส่ศัตรูเลือดต่ำกว่า 20%
 
     this.maxHp = cfg.hp;
     this.hp = cfg.hp;
@@ -202,7 +203,7 @@ export class Tower {
       } else {
         const m = muzzleFn ? muzzleFn(this) : null;
         const radius = m?.r ?? 2.5;
-        state.bullets.push(new Bullet(bx, by, target, this.damage, this.getBulletColor(), radius, this.critChance, this.critDamage));
+        state.bullets.push(new Bullet(bx, by, target, this.damage, this.getBulletColor(), radius, this.critChance, this.critDamage, this.executeBonus));
       }
 
       this.cooldown = this.cooldownMax;

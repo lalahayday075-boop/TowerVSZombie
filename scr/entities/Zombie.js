@@ -1,4 +1,4 @@
-// scr/entities/Zombie.js
+// src/entities/Zombie.js
 import { state, makeMapConfig } from "../core/state.js";
 import { devState } from "../systems/devState.js";
 import { spawnDamage } from "../systems/damageSystem.js";
@@ -12,11 +12,12 @@ export function setZombieMapConfig(canvas) {
 }
 
 export class Zombie {
-  constructor(type, hp, speed, damage, reward, isBoss = false, attackMode = "melee") {
+  constructor(type, hp, speed, damage, reward, isBoss = false, attackMode = "melee", armor = 0) {
     this.type = type;
     this.moveType = type;
     this.isBoss = isBoss;
     this.dead = false;
+    this.armor = armor; // ลดดาเมจที่ได้รับจากป้อมแบบ flat ต่อนัด (ดู Bullet.js) — กลไกใหม่สำหรับ hardcore
 
     this.x = 180 + (Math.random() * 100 - 50);
     this.y = -20;
