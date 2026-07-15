@@ -33,6 +33,14 @@ const SKIN_RENDERERS = {
   },
 };
 
+// เปิดให้หน้า UI (เช่นหน้าพรีวิวสกินซอมบี้) ดึงลายจริงไปวาดพรีวิวได้ตรงกับในเกม 100%
+export { DEFAULT_RENDERERS, SKIN_RENDERERS };
+
+export function getZombieSkinDrawFn(skinName, type) {
+  const skinSet = SKIN_RENDERERS[skinName] || DEFAULT_RENDERERS;
+  return skinSet[type] || DEFAULT_RENDERERS[type] || null;
+}
+
 export function renderZombie(ctx, z) {
   const type = zombieKey(z);
   const equippedSkin = playerData?.zombieSkin?.equipped?.[type] || "default";
