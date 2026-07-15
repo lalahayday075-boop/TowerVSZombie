@@ -15,7 +15,7 @@ export function openZombieSkinPage() {
 
     html += `
       <div class="zombie-type-block">
-        <div class="zombie-type-header" data-type="${type}"><span class="arrow"></span>${type}</div>
+        <div class="zombie-type-header"><div class="type-icon">🧟</div><div class="type-info"><div class="type-name"> data-type="${type}"><span class="arrow"></span>${type}</div><div class="type-count">${owned.length} Owned</div></div>
         <div class="zombie-type-content" id="content-${type}">
     `;
 
