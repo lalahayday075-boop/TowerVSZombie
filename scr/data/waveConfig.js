@@ -1,27 +1,77 @@
-// scr/data/waveConfig.js
+// src/data/waveConfig.js
+// รื้อใหม่ทั้งหมดสำหรับบาลานซ์แบบ hardcore (ดู GAME_DESIGN.md สำหรับเหตุผลเบื้องหลังตัวเลข)
+//
+// เดิม: ตาราง REWARD_TABLE คงที่ + สูตร dmg/hp เชิงเส้นง่ายๆ ทำให้ทุกอย่างดูแบนราบ ไม่มีจังหวะกดดัน
+// ใหม่: ทุกอย่างเป็นสูตรทวีคูณ (compound growth) ปรับจูนทีหลังง่ายแค่ขยับตัวเลขเดียว ไม่ต้องแก้ตาราง
+//
+// ฟิลด์ต่อประเภทศัตรู:
+//   baseHp/hpGrowth      HP(wave) = baseHp * hpGrowth^wave
+//   baseDmg/dmgGrowth    DMG(wave) = baseDmg * dmgGrowth^wave
+//   baseSpeed/speedMax   ความเร็วไต่ขึ้นทีละน้อยจนถึงเพดาน (ดู waveScaling.calcSpeed)
+//   armorBase/armorPer10 เกราะเริ่มต้น + เพิ่มทุก 10 เวฟ (ดูกลไก armor ใน Bullet.js)
+//   unlockWave           เวฟที่เริ่มเจอศัตรูประเภทนี้
+//   countBase/countEvery/countMax  จำนวนตัวต่อเวฟ ไต่ขึ้นทีละตัวทุกกี่เวฟ จนถึงเพดาน
 export const ENEMY_BASE = {
-  ground_melee: { dmg: 9, hpMul: 16 },
-  air_melee: { dmg: 15, hpMul: 8 },
-  air_ranged: { dmg: 20, hpMul: 3.5 },
-  ground_ranged: { dmg: 10, hpMul: 8.5 },
-  ground_lightning: { dmg: 15, hpMul: 3.3 },
-  air_lightning: { dmg: 18, hpMul: 2.5 },
-  boss_ground: { dmg: 51, hpMul: 58.8 },
-  boss_air: { dmg: 66, hpMul: 43.8 },
+  ground_melee: {
+    unlockWave: 1, baseHp: 40, hpGrowth: 1.028, baseDmg: 6, dmgGrowth: 1.014,
+    baseSpeed: 70, speedMax: 220, armorBase: 0, armorPer10: 0,
+    countBase: 3, countEvery: 10, countMax: 14,
+  },
+  swarm_fast: {
+    unlockWave: 10, baseHp: 16, hpGrowth: 1.022, baseDmg: 4, dmgGrowth: 1.010,
+    baseSpeed: 145, speedMax: 340, armorBase: 0, armorPer10: 0,
+    countBase: 4, countEvery: 8, countMax: 16,
+  },
+  air_melee: {
+    unlockWave: 12, baseHp: 55, hpGrowth: 1.030, baseDmg: 9, dmgGrowth: 1.014,
+    baseSpeed: 85, speedMax: 235, armorBase: 0, armorPer10: 0,
+    countBase: 1, countEvery: 15, countMax: 8,
+  },
+  armored_ground: {
+    unlockWave: 18, baseHp: 220, hpGrowth: 1.026, baseDmg: 14, dmgGrowth: 1.012,
+    baseSpeed: 45, speedMax: 140, armorBase: 8, armorPer10: 1,
+    countBase: 1, countEvery: 12, countMax: 5,
+  },
+  ground_ranged: {
+    unlockWave: 30, baseHp: 70, hpGrowth: 1.032, baseDmg: 7, dmgGrowth: 1.015,
+    baseSpeed: 60, speedMax: 190, armorBase: 1, armorPer10: 1,
+    countBase: 2, countEvery: 20, countMax: 8,
+  },
+  air_ranged: {
+    unlockWave: 45, baseHp: 60, hpGrowth: 1.032, baseDmg: 10, dmgGrowth: 1.015,
+    baseSpeed: 90, speedMax: 235, armorBase: 1, armorPer10: 1,
+    countBase: 1, countEvery: 25, countMax: 6,
+  },
+  ground_lightning: {
+    unlockWave: 70, baseHp: 90, hpGrowth: 1.035, baseDmg: 12, dmgGrowth: 1.017,
+    baseSpeed: 65, speedMax: 210, armorBase: 2, armorPer10: 1,
+    countBase: 1, countEvery: 30, countMax: 4,
+  },
+  air_lightning: {
+    unlockWave: 90, baseHp: 85, hpGrowth: 1.035, baseDmg: 14, dmgGrowth: 1.017,
+    baseSpeed: 88, speedMax: 225, armorBase: 2, armorPer10: 1,
+    countBase: 1, countEvery: 30, countMax: 4,
+  },
+  boss_ground: {
+    unlockWave: 10, baseHp: 1500, hpGrowth: 1.042, baseDmg: 32, dmgGrowth: 1.020,
+    baseSpeed: 55, speedMax: 200, armorBase: 6, armorPer10: 1,
+    countBase: 1, countEvery: 999, countMax: 1,
+  },
+  boss_air: {
+    unlockWave: 30, baseHp: 1100, hpGrowth: 1.042, baseDmg: 40, dmgGrowth: 1.020,
+    baseSpeed: 65, speedMax: 210, armorBase: 3, armorPer10: 1,
+    countBase: 1, countEvery: 999, countMax: 1,
+  },
 };
 
-// หมายเหตุ: ช่วง 21-40 ของเดิมคือ 110-160 (พุ่งผิดปกติแล้วร่วงกลับที่ 41-60) — ดู AUDIT.md ข้อ 6
-// ปรับให้ไล่ระดับต่อเนื่องแทน ค่าอื่นคงเดิมทั้งหมด
-export const REWARD_TABLE = [
-  { from: 1, to: 5, min: 15, max: 20 },
-  { from: 6, to: 10, min: 17, max: 23 },
-  { from: 11, to: 20, min: 20, max: 25 },
-  { from: 21, to: 40, min: 22, max: 28 },
-  { from: 41, to: 60, min: 16, max: 30 },
-  { from: 61, to: 90, min: 30, max: 60 },
-  { from: 91, to: 120, min: 60, max: 120 },
-  { from: 121, to: 150, min: 120, max: 240 },
-  { from: 151, to: 180, min: 240, max: 500 },
-  { from: 181, to: 220, min: 500, max: 900 },
-  { from: 221, to: 9999, min: 900, max: 1600 },
-];
+// เงินรางวัลต่อการฆ่า 1 ตัว ไต่ขึ้นแบบเข้าใกล้เพดาน (asymptotic) ไม่ใช่ exponential ไม่มีเพดาน
+// เพราะจำนวนเงินที่ต้องมีสูงสุดคือค่าป้อมแพงสุด (~9,500) ถ้ารางวัลโตไม่หยุดตัวเลขจะพังความหมายเร็วมาก
+// reward(wave) = rewardMax - (rewardMax - baseReward) * e^(-sharpness * wave)
+export const REWARD_CONFIG = {
+  baseReward: 6,
+  rewardMax: 50,
+  sharpness: 0.012,
+  rewardVariance: 0.25, // ±25% ต่อตัว กันรู้สึกจำเจ
+  bossMultiplier: 3,
+  expRatio: 0.35,
+};
