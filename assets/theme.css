@@ -362,3 +362,33 @@ a, input, select, .tower-card, .gacha-card, .zombie-row, .map-theme-btn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ========================================================= */
+/* APP TOAST (แจ้งเตือนสั้นๆ กลางบน — ใช้แทน alert()) */
+/* ========================================================= */
+
+.app-toast {
+  position: fixed;
+  top: calc(14px + var(--safe-top));
+  left: 50%;
+  transform: translateX(-50%) translateY(-14px);
+  opacity: 0;
+  background: linear-gradient(180deg, #26282f, #17181d);
+  color: var(--text-0);
+  padding: 11px 18px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--toast-color, var(--gold));
+  box-shadow: 0 0 16px 0 var(--toast-color, var(--gold)), var(--shadow-1);
+  font-weight: 700;
+  font-size: 13.5px;
+  max-width: min(86vw, 360px);
+  text-align: center;
+  z-index: var(--z-modal-top);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.app-toast-in {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}

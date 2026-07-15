@@ -3,24 +3,26 @@
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.85);
-  z-index: 100;
+  background: rgba(6, 7, 10, 0.88);
+  backdrop-filter: blur(4px);
+  z-index: var(--z-modal, 60);
   justify-content: center;
   align-items: center;
+  animation: fadeIn 0.18s ease;
 }
 
 /* ===== MAIN BOX ===== */
 .gacha-box {
   width: 95%;
-  max-width: 380px; /* 🔥 พอดีกับ canvas 400px */
-  max-height: 90vh; /* 🔥 ไม่ล้นจอ */
-  overflow-y: auto; /* 🔥 ถ้ายาวเกินให้เลื่อน */
-  background: linear-gradient(180deg, #201f22, #17161a);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 18px;
+  max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #201f22, #131218);
+  border: 1px solid rgba(255, 204, 0, 0.12);
+  border-radius: var(--r-lg, 18px);
   padding: 18px;
   color: white;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(255, 204, 0, 0.05);
 }
 
 .gacha-box::-webkit-scrollbar { width: 6px; }
@@ -29,69 +31,139 @@
 /* ===== HEADER ===== */
 .gacha-title {
   text-align: center;
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 21px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #ffe08a, #ffcf4d 40%, #ff9d00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
 }
 
 .gacha-currency {
   display: flex;
-  justify-content: space-between;
-  font-weight: bold;
-  margin-bottom: 12px;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
 }
+
+.gacha-currency-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13.5px;
+  background: linear-gradient(180deg, #1e2028, #14151b);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.gacha-currency-money { color: #ffcf4d; }
+.gacha-currency-diamond { color: #6af0ff; }
 
 /* ===== GRID LAYOUT (2 คอลัมน์) ===== */
 .gacha-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 🔥 2 ช่อง */
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
 /* ===== CARD ===== */
 .gacha-card {
-  background: #232323;
-  border-radius: 12px;
-  padding: 10px;
+  position: relative;
+  background: linear-gradient(155deg, #232323, #1a1a1d);
+  border-radius: 14px;
+  padding: 12px 10px 10px;
   font-size: 13px;
   border: 1px solid #333;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.gacha-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.55;
+  background: radial-gradient(circle at 50% 0%, var(--card-glow, rgba(255,255,255,0.06)), transparent 65%);
 }
 
 .gacha-card h3 {
-  font-size: 13px;
-  margin: 0 0 6px 0;
-}
-
-/* ===== BUTTON ===== */
-.gacha-btn {
-  width: 100%;
-  padding: 6px;
-  border-radius: 8px;
-  border: none;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 4px;
-}
-
-.money-btn {
-  background: #ffc107;
-  color: black;
-}
-
-.diamond-btn {
-  background: #4dabff;
-  color: white;
-}
-
-.gacha-close {
-  margin-top: 10px;
-  background: #444;
-  color: white;
-}
-.gacha-card {
   position: relative;
+  font-size: 13px;
+  margin: 2px 0 8px 0;
+  text-align: center;
+  color: var(--text-1, #b7bcc8);
+  font-weight: 600;
 }
 
+.gacha-card-banner {
+  position: absolute;
+  top: 8px;
+  left: -28px;
+  transform: rotate(-40deg);
+  width: 110px;
+  text-align: center;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  padding: 2px 0;
+  color: #201400;
+  z-index: 2;
+}
+
+/* ระดับสีของแต่ละตู้ */
+.tier-basic { --card-glow: rgba(180,180,190,0.18); }
+.tier-basic .gacha-card-banner { background: linear-gradient(90deg,#cfd3da,#9aa0aa); color: #1a1a1a; }
+
+.tier-mid { --card-glow: rgba(255,204,0,0.18); }
+.tier-mid .gacha-card-banner { background: linear-gradient(90deg,#ffe08a,#ffcf4d); }
+
+.tier-high { --card-glow: rgba(255,120,60,0.22); }
+.tier-high { border-color: rgba(255,140,60,0.25); }
+.tier-high .gacha-card-banner { background: linear-gradient(90deg,#ff9d00,#ff5d5d); color: #260a00; }
+
+.tier-diamond { --card-glow: rgba(106,240,255,0.22); }
+.tier-diamond { border-color: rgba(106,240,255,0.3); }
+.tier-diamond .gacha-card-banner { background: linear-gradient(90deg,#6af0ff,#4aa3ff); color: #001824; }
+
+/* ===== SHOWCASE (ตัวเด่นของตู้) ===== */
+.gacha-showcase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-top: 4px;
+}
+
+.gacha-main-preview {
+  background: radial-gradient(circle at 50% 40%, #1c1c1f, #0f0f11);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.gacha-best-label {
+  text-align: center;
+  margin-top: 5px;
+}
+
+.gacha-best-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--best-color, gold);
+}
+
+.gacha-best-chance {
+  font-size: 10.5px;
+  color: var(--best-color, gold);
+  opacity: 0.85;
+}
+
+/* ===== INFO BUTTON ===== */
 .gacha-info-btn {
   position: absolute;
   top: 6px;
@@ -100,14 +172,65 @@
   height: 22px;
   background: #ffcc00;
   color: #000;
-  font-weight: bold;
+  font-weight: 800;
+  font-style: italic;
+  border: none;
   border-radius: 50%;
   text-align: center;
   line-height: 22px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
+  z-index: 3;
+  padding: 0;
 }
 
+/* ===== ROLL BUTTONS ===== */
+.gacha-btn {
+  width: 100%;
+  padding: 8px 6px;
+  border-radius: 9px;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.1s ease, filter 0.15s ease, opacity 0.15s ease;
+}
+
+.gacha-btn:active { transform: scale(0.96); }
+.gacha-btn-cost { font-size: 11px; opacity: 0.85; }
+
+.gacha-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+
+.gacha-rolling { display: inline-flex; align-items: center; gap: 6px; animation: gachaSpin 0.9s linear infinite; }
+@keyframes gachaSpin {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(18deg); }
+}
+
+.tier-basic-btn { background: linear-gradient(180deg,#e4e7ec,#b9c0cc); color: #16181d; }
+.tier-mid-btn { background: linear-gradient(180deg,#ffe08a,#ffb020); color: #201400; }
+.tier-high-btn { background: linear-gradient(180deg,#ff9d5c,#ff5d5d); color: #260a00; }
+.tier-diamond-btn { background: linear-gradient(180deg,#8fe9ff,#4aa3ff); color: #001824; }
+
+.gacha-btn:not(:disabled):hover { filter: brightness(1.08); }
+
+.gacha-close {
+  margin-top: 12px;
+  background: #33353d;
+  color: #fff;
+  justify-content: center;
+}
+.gacha-close:hover { background: #3d3f47; }
+
+/* ===== INFO POPUP (รายละเอียดของในตู้) ===== */
 .gacha-info-popup {
   position: fixed;
   inset: 0;
@@ -116,81 +239,177 @@
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  padding: 16px;
+  animation: fadeIn 0.15s ease;
 }
 
 .gacha-info-box {
   background: #1b1b1b;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: 14px;
   max-height: 85vh;
   overflow-y: auto;
-  width: 95%;
-  max-width: 700px;  /* ✅ จำกัดเฉพาะจอใหญ่ */
+  width: 100%;
+  max-width: 700px;
   color: white;
+  box-shadow: var(--shadow-2, 0 18px 46px rgba(0,0,0,0.65));
+}
+
+.gacha-info-box h2 {
+  font-size: 16px;
+  margin: 2px 0 12px;
+  text-align: center;
+  color: #ffe08a;
 }
 
 .gacha-info-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 @media (min-width: 600px) {
-  .gacha-info-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .gacha-info-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .gacha-info-card {
   display: flex;
-  justify-content: space-between;
-  background: #2a2a2a;
-  padding: 10px;
-  border-radius: 8px;
-  align-items: center;
   gap: 10px;
-  flex-wrap: wrap; /* 🔥 กันข้อความยาวดันล้น */
+  background: linear-gradient(155deg, #242424, #1a1a1a);
+  padding: 10px;
+  border-radius: 10px;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 3px 0 0 var(--tier-color, #888);
 }
 
-.gacha-info-left {
-  font-size: 13px;
-}
+.gacha-info-left { font-size: 12.5px; flex: 1; min-width: 0; }
+.gacha-info-left b { font-size: 13px; }
+
+.gacha-info-tier { font-size: 11.5px; font-weight: 700; margin: 2px 0; }
+.gacha-info-chance { font-size: 11.5px; color: #ffd76a; margin-bottom: 3px; }
+.gacha-info-stats { font-size: 11.5px; color: #b7bcc8; line-height: 1.5; }
 
 .gacha-preview {
-  background: #111;
-  border-radius: 8px;
-}
-.gacha-showcase {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px;
+  background: radial-gradient(circle at 50% 40%, #1c1c1f, #0f0f11);
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
-.gacha-main-preview {
-  background: #111;
-  border-radius: 12px;
-}
-
-.gacha-best-label {
-  font-size: 12px;
-  margin-top: 4px;
-  color: gold;
-}
 .gacha-close-btn {
   display: block;
   width: 100%;
-  margin-top: 12px;
-  padding: 10px;
+  margin-top: 14px;
+  padding: 11px;
   border: none;
-  border-radius: 8px;
-  background: #444;
-  color: #fff;
-  font-weight: bold;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#ffe08a,#ffb020);
+  color: #201400;
+  font-weight: 800;
   cursor: pointer;
 }
+.gacha-close-btn:hover { filter: brightness(1.08); }
 
-.gacha-close-btn:hover {
-  background: #555;
+/* ===== RESULT MODAL (ผลการสุ่ม) ===== */
+.gacha-result-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 16px;
+  animation: fadeIn 0.18s ease;
 }
 
+.gacha-result-box {
+  width: 100%;
+  max-width: 420px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #201f22, #131218);
+  border-radius: 18px;
+  padding: 20px 16px 16px;
+  box-shadow: 0 0 50px 0 var(--tier-glow, rgba(255,204,0,0.25)), 0 20px 50px rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.08);
+  animation: popupIn 0.2s ease-out;
+}
+
+.gacha-result-box.tier-legendary { --tier-glow: rgba(255,207,77,0.55); }
+.gacha-result-box.tier-epic { --tier-glow: rgba(192,132,255,0.5); }
+.gacha-result-box.tier-rare { --tier-glow: rgba(74,163,255,0.4); }
+.gacha-result-box.tier-uncommon { --tier-glow: rgba(60,255,157,0.35); }
+.gacha-result-box.tier-common { --tier-glow: rgba(154,160,170,0.3); }
+
+@keyframes popupIn {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.gacha-result-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 14px;
+  color: #ffe08a;
+}
+
+.gacha-result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.gacha-result-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(155deg, #242424, #17171a);
+  border: 1px solid var(--tier-color, #555);
+  border-radius: 12px;
+  padding: 8px 4px 6px;
+  box-shadow: 0 0 14px 0 var(--tier-glow, transparent);
+}
+
+.gacha-result-card.tier-epic,
+.gacha-result-card.tier-legendary {
+  animation: gachaResultPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes gachaResultPulse {
+  0%, 100% { box-shadow: 0 0 10px 0 var(--tier-glow); }
+  50% { box-shadow: 0 0 22px 4px var(--tier-glow); }
+}
+
+.gacha-result-count {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(0,0,0,0.55);
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+
+.gacha-result-preview {
+  background: radial-gradient(circle at 50% 40%, #1c1c1f, #0f0f11);
+  border-radius: 8px;
+}
+
+.gacha-result-name {
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 4px;
+  text-align: center;
+  word-break: break-word;
+}
+
+.gacha-result-stars {
+  font-size: 10px;
+  margin-top: 1px;
+}

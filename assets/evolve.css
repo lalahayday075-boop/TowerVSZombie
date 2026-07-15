@@ -11,19 +11,17 @@
   animation: fadeIn 0.2s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 /* ===== BOX ===== */
 .evolve-box {
-  width: 380px;
-  max-width: 92%;
+  width: 400px;
+  max-width: 94%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   background: linear-gradient(180deg,#1c1c1c,#111);
   border-radius: 18px;
   padding: 20px;
-  box-shadow: 
+  box-shadow:
     0 0 25px rgba(150,0,255,0.3),
     0 10px 40px rgba(0,0,0,0.8);
   border: 1px solid #2b2b2b;
@@ -34,6 +32,7 @@
   text-align: center;
   margin-bottom: 14px;
   font-size: 20px;
+  font-weight: 800;
   letter-spacing: 1px;
   background: linear-gradient(90deg,#c084ff,#7c3aed);
   -webkit-background-clip: text;
@@ -48,44 +47,170 @@
   background: #181818;
   border-radius: 10px;
   border: 1px solid #2a2a2a;
-  max-height: 55vh;
+  max-height: 60vh;
   overflow-y: auto;
 }
 
 .evolve-list::-webkit-scrollbar { width: 6px; }
 .evolve-list::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
 
+.evolve-empty {
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+  padding: 24px 0;
+}
+
 /* ===== CARD (การ์ดแต่ละชนิดป้อมที่อีโวได้) ===== */
 .evolve-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
   background: linear-gradient(145deg, #202020, #191919);
   border: 1px solid #2d2d2d;
-  border-radius: 12px;
-  padding: 10px 12px;
-  margin-bottom: 10px;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .evolve-card:last-child { margin-bottom: 0; }
 
-.evolve-card-title {
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  color: #e9d5ff;
-  margin-bottom: 2px;
+.evolve-card.ready {
+  border-color: rgba(192,132,255,0.55);
+  box-shadow: 0 0 18px rgba(157,107,255,0.25), inset 0 0 20px rgba(157,107,255,0.05);
+  animation: evolveReadyPulse 2.2s ease-in-out infinite;
 }
 
-.evolve-card-info {
-  font-size: 12.5px;
+@keyframes evolveReadyPulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(157,107,255,0.2), inset 0 0 16px rgba(157,107,255,0.04); }
+  50% { box-shadow: 0 0 26px rgba(157,107,255,0.4), inset 0 0 22px rgba(157,107,255,0.08); }
+}
+
+/* ===== แถวบน: พรีวิวก่อน → หลัง ===== */
+.evolve-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.evolve-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.evolve-preview {
+  background: radial-gradient(circle at 50% 40%, #232323, #131313);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.evolve-preview-wrap.locked .evolve-preview {
+  filter: grayscale(0.85) brightness(0.55);
+}
+
+.evolve-preview-stars {
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.evolve-arrow {
+  font-size: 20px;
+  color: #555;
+  transform: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.evolve-arrow.ready {
+  color: #c084ff;
+  text-shadow: 0 0 10px rgba(192,132,255,0.6);
+  animation: evolveArrowNudge 1.4s ease-in-out infinite;
+}
+
+@keyframes evolveArrowNudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+.evolve-card-title {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #e9d5ff;
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.evolve-card-arrow-inline { color: #a855f7; }
+
+/* ===== PROGRESS BAR (มีกี่ตัว / ต้องใช้กี่ตัว) ===== */
+.evolve-progress {
+  margin-bottom: 10px;
+}
+
+.evolve-progress-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #111;
+  border: 1px solid #2a2a2a;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.evolve-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg,#7c3aed,#a855f7);
+  transition: width 0.3s ease;
+}
+
+.evolve-progress-fill.ready {
+  background: linear-gradient(90deg,#c084ff,#ffcf4d);
+  box-shadow: 0 0 8px rgba(255,207,77,0.5);
+}
+
+.evolve-progress-text {
+  text-align: center;
+  font-size: 11.5px;
   color: #9a9a9a;
 }
 
-.evolve-card .evolve-btn {
-  flex: none;
-  min-width: 92px;
+/* ===== STAT COMPARISON (ก่อน → หลัง) ===== */
+.evolve-stats {
+  background: #141414;
+  border: 1px solid #262626;
+  border-radius: 10px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
 }
+
+.evo-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.evo-stat-row:last-child { border-bottom: none; }
+
+.evo-stat-label { color: #9a9a9a; }
+
+.evo-stat-values {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.evo-stat-before { color: #777; }
+.evo-stat-arrow { color: #555; font-size: 11px; }
+.evo-stat-same { color: #ddd; }
+.evo-stat-up { color: #3cff9d; }
+.evo-stat-down { color: #ff5d5d; }
 
 /* ===== BUTTON ROW ===== */
 .evolve-actions {
@@ -104,14 +229,25 @@
   transition: 0.15s;
 }
 
+.evolve-card .evolve-btn {
+  width: 100%;
+}
+
 .evolve-btn-main {
   background: linear-gradient(180deg,#a855f7,#7e22ce);
   color: white;
   box-shadow: 0 4px 12px rgba(140,0,255,0.4);
 }
 
-.evolve-btn-main:hover {
-  transform: scale(1.05);
+.evolve-btn-main:hover:not(:disabled) {
+  transform: scale(1.03);
+}
+
+.evolve-btn-main:disabled {
+  background: #333;
+  color: #888;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 .evolve-btn-close {
