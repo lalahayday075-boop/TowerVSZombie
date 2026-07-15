@@ -2,8 +2,8 @@
 import { Router } from "express";
 import { pool } from "../db/pool.js";
 import { getPlayerRow, toClientState } from "../playerState.js";
-import { generateWave } from "../../src/systems/waveGenerator.js";
-import { calcRewardByWave, calcExpFromReward } from "../../src/systems/waveScaling.js";
+import { generateWave } from "../../scr/systems/waveGenerator.js";
+import { calcRewardByWave, calcExpFromReward } from "../../scr/systems/waveScaling.js";
 import { refreshAndPersistUnlocks } from "../unlocks.js";
 import { asyncHandler } from "../asyncHandler.js";
 

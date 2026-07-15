@@ -2,7 +2,7 @@
 import { Router } from "express";
 import { pool } from "../db/pool.js";
 import { getPlayerRow, toClientState } from "../playerState.js";
-import { EVOLVE_TREE } from "../../src/data/evolveTree.js";
+import { EVOLVE_TREE } from "../../scr/data/evolveTree.js";
 import { asyncHandler } from "../asyncHandler.js";
 
 export const evolveRouter = Router();

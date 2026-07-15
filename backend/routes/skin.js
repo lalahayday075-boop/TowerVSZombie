@@ -2,8 +2,8 @@
 import { Router } from "express";
 import { pool } from "../db/pool.js";
 import { getPlayerRow, toClientState } from "../playerState.js";
-import { SKIN_DATABASE } from "../../src/render/towerSkins/index.js";
-import { ZOMBIE_TYPES } from "../../src/systems/unlockSystem.js";
+import { SKIN_DATABASE } from "../../scr/render/towerSkins/index.js";
+import { ZOMBIE_TYPES } from "../../scr/systems/unlockSystem.js";
 import { asyncHandler } from "../asyncHandler.js";
 import { computeUnlockedTowerSkins, computeUnlockedMapThemes, computeUnlockedZombieSkins } from "../unlocks.js";
 
