@@ -121,14 +121,18 @@ export async function spawnWave() {
 }
 
 // จบเวฟจริง (ซอมบี้หมดสนาม) — เรียก server ให้คำนวณ+ยืนยันรางวัลจริง แล้วเขียนทับ state ฝั่ง client
-export async function completeWaveOnServer() {
+// onDone จะถูกเรียกก็ต่อเมื่อ server ยืนยันสำเร็จเท่านั้น (กันไม่ให้เวฟเดินหน้าเองโดยที่ server ยังไม่ได้เซฟ)
+export async function completeWaveOnServer(onDone) {
   try {
     const result = await api.completeWave();
     applyFullGameData(result.state);
     saveGame();
     updateUI();
+    if (onDone) onDone();
   } catch (err) {
     console.error("[wave] ยืนยันจบเวฟไม่สำเร็จ:", err.message);
+    // ลองใหม่อีกครั้งใน 2 วิ กันเน็ตสะดุดแล้วรางวัล/เลขเวฟค้างไม่ถูกเซฟ
+    setTimeout(() => completeWaveOnServer(onDone), 2000);
   }
 }
 
