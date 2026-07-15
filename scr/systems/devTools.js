@@ -1,4 +1,4 @@
-// scr/systems/devTools.js
+// src/systems/devTools.js
 import { state } from "../core/state.js";
 import { devState } from "./devState.js";
 import { TOWER_TYPES } from "../data/towerTypes.js";
@@ -7,8 +7,9 @@ import { Tower } from "../entities/Tower.js";
 import { Zombie } from "../entities/Zombie.js";
 import { applyTowerUpgrade } from "./towerSystem.js";
 import { getEnemyStats, calcSpeed, calcRewardByWave } from "./waveScaling.js";
+import { generateWave, shuffleArray } from "./waveGenerator.js";
 import { updateZombieUI, updateUI } from "../ui/hud.js";
-import { clearWaveInstantFull, spawnWave } from "./waveController.js";
+import { clearWaveInstantFull } from "./waveController.js";
 
 let DEV_CREATED = false;
 let devOpen = false;
@@ -166,7 +167,7 @@ function devSummonZombie() {
     const speed = inputSpeed > 0 ? inputSpeed : calcSpeed(type === "air" ? 90 : 80, state.wave, 0.45, type === "air" ? 300 : 290);
     const reward = calcRewardByWave(state.wave, isBoss);
 
-    state.zombies.push(new Zombie(type, hp, speed, damage, reward, isBoss, mode));
+    state.zombies.push(new Zombie(type, hp, speed, damage, reward, isBoss, mode, 0));
     state.zombiesTotalThisWave++;
   }
 
@@ -188,6 +189,9 @@ function toggleDevImmortal() {
 
 function devJumpWave() {
   if (!devState.DEV_MODE) return;
+  // หมายเหตุ: ตอนนี้ server เป็นคนกำหนด "เวฟจริง" ของผู้เล่น (เก็บใน DB) ปุ่มนี้แค่ preview
+  // ซอมบี้ของเวฟที่ระบุฝั่ง client เท่านั้น ไม่ได้เปลี่ยนเวฟจริงบน server และไม่ได้รางวัลจริง
+  // ใช้เพื่อดูหน้าตา/บาลานซ์ของเวฟนั้นๆ เท่านั้น
   const targetWave = parseInt(document.getElementById("dev-wave-input").value);
   if (!targetWave || targetWave < 1) return;
 
@@ -206,7 +210,24 @@ function devJumpWave() {
   updateZombieUI();
   updateUI();
 
-  spawnWave();
+  const data = generateWave(targetWave);
+  state.zombiesTotalThisWave = data.enemies.reduce((sum, e) => sum + e.count, 0);
+  updateZombieUI();
+
+  const queue = [];
+  data.enemies.forEach(e => { for (let i = 0; i < e.count; i++) queue.push({ ...e }); });
+  shuffleArray(queue);
+
+  let index = 0;
+  state.waveSpawning = true;
+  const spawnNext = () => {
+    if (index >= queue.length) { state.spawnTimer = null; state.waveSpawning = false; return; }
+    const e = queue[index++];
+    const reward = calcRewardByWave(e.rewardWave ?? targetWave, e.rewardIsBoss ?? false);
+    state.zombies.push(new Zombie(e.type, e.hp, e.speed, e.damage, reward, e.isBoss || false, e.attackMode || "melee", e.armor || 0));
+    state.spawnTimer = setTimeout(spawnNext, data.getSpawnDelay() * 300);
+  };
+  spawnNext();
 }
 
 function devClearAllTowers() {

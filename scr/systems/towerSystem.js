@@ -1,9 +1,11 @@
-// scr/systems/towerSystem.js
+// src/systems/towerSystem.js
 import { state } from "../core/state.js";
 import { TOWER_TYPES, MAX_TOWER_LEVEL } from "../data/towerTypes.js";
-import { Tower } from "../entities/Tower.js";
-import { saveGame } from "./saveSystem.js";
+import { api } from "./api.js";
+import { applyFullGameData, saveGame } from "./saveSystem.js";
 
+// ฟังก์ชันนี้ยังใช้ฝั่ง client เพื่อคำนวณค่าป้อมหลังโหลด/sync จาก server (ต้องได้ค่าตรงกับ backend เป๊ะๆ
+// เพราะ server เก็บแค่ level/totalInvest แล้วให้ client คำนวณสเตตัสที่แสดงผลเอง)
 export function applyTowerUpgrade(tower) {
   const cfg = TOWER_TYPES[tower.type];
   const maxLevel = cfg.maxLevel || MAX_TOWER_LEVEL;
@@ -46,33 +48,42 @@ export function getUpgradeCost(tower) {
   return { type: "money", cost: Math.floor((cfg.cost / 2) * Math.pow(lvl, 1 / 10)) };
 }
 
-export function upgradeTower(onUpdate) {
-  const tower = state.selectedTower;
-  if (!tower) return;
+// สำคัญ: ทุกฟังก์ชันด้านล่างนี้ "รอ server อนุมัติก่อน" ถึงจะมีผลจริงกับ inventory/เงิน/เพชร
+// (เดิมแก้ state ฝั่ง client ตรงๆ ทันที ซึ่งเป็นช่องโกงหลัก — ตอนนี้ client แค่ "ขอ" เท่านั้น)
 
-  const cfg = TOWER_TYPES[tower.type];
-  const maxLevel = cfg.maxLevel || MAX_TOWER_LEVEL;
-  if (tower.level >= maxLevel) return;
-
-  const costData = getUpgradeCost(tower);
-  if (costData.type === "money" && state.money < costData.cost) return;
-  if (costData.type === "diamond" && state.diamonds < costData.cost) return;
-
-  if (costData.type === "money") {
-    state.money -= costData.cost;
-  } else {
-    state.diamonds -= costData.cost;
+export async function placeTower(type, slot, onError) {
+  try {
+    const result = await api.placeTower(type, slot.index);
+    applyFullGameData(result.state);
+    saveGame();
+    return true;
+  } catch (err) {
+    if (onError) onError(err.message);
+    else alert(err.message);
+    return false;
   }
-  tower.totalInvest += costData.cost;
-
-  applyTowerUpgrade(tower);
-  if (onUpdate) onUpdate();
-  saveGame();
 }
 
-export function sellTower(fromButton, onConfirmNeeded, onSold) {
+export async function upgradeTower(onUpdate, onError) {
   const tower = state.selectedTower;
-  if (!tower) return;
+  if (!tower || tower.slot == null) return;
+
+  try {
+    const result = await api.upgradeTower(tower.slot.index);
+    applyFullGameData(result.state);
+    saveGame();
+    // เลือกป้อมตัวเดิมต่อ (applyFullGameData สร้าง instance ใหม่ทั้งหมด อ้างอิงจาก slotIndex เดิม)
+    state.selectedTower = state.towers.find(t => t.slot?.index === tower.slot.index) || null;
+    if (onUpdate) onUpdate();
+  } catch (err) {
+    if (onError) onError(err.message);
+    else alert(err.message);
+  }
+}
+
+export async function sellTower(fromButton, onConfirmNeeded, onSold, onError) {
+  const tower = state.selectedTower;
+  if (!tower || tower.slot == null) return;
 
   if (fromButton && !state.sellConfirmMode) {
     state.sellConfirmMode = true;
@@ -80,39 +91,15 @@ export function sellTower(fromButton, onConfirmNeeded, onSold) {
     return;
   }
 
-  state.towerInventory[tower.type]++;
-
-  const slot = tower.slot;
-  if (slot) {
-    slot.occupied = false;
-    slot.towerRef = null;
-    slot.respawning = false;
-    if (slot.respawnTimer) {
-      clearTimeout(slot.respawnTimer);
-      slot.respawnTimer = null;
-    }
+  try {
+    const result = await api.sellTower(tower.slot.index);
+    applyFullGameData(result.state);
+    saveGame();
+    state.sellConfirmMode = false;
+    state.selectedTower = null;
+    if (onSold) onSold();
+  } catch (err) {
+    if (onError) onError(err.message);
+    else alert(err.message);
   }
-
-  state.towers.splice(state.towers.indexOf(tower), 1);
-  state.sellConfirmMode = false;
-  state.selectedTower = null;
-
-  if (onSold) onSold();
-  saveGame();
-}
-
-export function placeTower(type, slot) {
-  if (state.towerInventory[type] <= 0) return null;
-  state.towerInventory[type]--;
-
-  const tower = new Tower(slot.x, slot.y, type);
-  tower.slot = slot;
-
-  state.towers.push(tower);
-  slot.occupied = true;
-  slot.towerRef = tower;
-  slot.towerType = type;
-
-  saveGame();
-  return tower;
 }

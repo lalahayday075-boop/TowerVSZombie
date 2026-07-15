@@ -1,4 +1,4 @@
-// scr/systems/zombieRuntime.js
+// src/systems/zombieRuntime.js
 import { state } from "../core/state.js";
 import { canvasRef } from "../core/canvasRef.js";
 import { playerData } from "./playerData.js";
@@ -6,7 +6,6 @@ import { updateZombieUI, updateUI } from "../ui/hud.js";
 import { spawnDamage, addExp } from "./damageSystem.js";
 import { calcExpFromReward } from "./waveScaling.js";
 import { rollDiamondDrop, MoneyPopup, DiamondPopup, moneyPopups, diamondPopups } from "./dropSystem.js";
-import { checkMapUnlock, checkZombieSkinUnlock, checkSkinUnlocks } from "./unlockSystem.js";
 
 export function drawZombiesLayer() {
   const { ctx } = canvasRef;
@@ -54,9 +53,8 @@ export function updateZombies(dt) {
       playerData.totalMoneyEarned += z.reward;
       state.totalZombiesKilled++;
 
-      checkMapUnlock();
-      checkZombieSkinUnlock();
-      checkSkinUnlocks();
+      // หมายเหตุ: การปลดล็อกสกิน/ธีมแมพ/สกินซอมบี้ตอนนี้ server เป็นคนคำนวณให้อัตโนมัติ
+      // ทุกครั้งที่ /wave/complete หรือ /state ถูกเรียก (ดู backend/unlocks.js) ไม่ต้องเช็คฝั่ง client อีก
 
       const expGain = calcExpFromReward(z.reward, z.isBoss);
       addExp(expGain);

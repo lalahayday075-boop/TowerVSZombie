@@ -1,4 +1,4 @@
-// scr/systems/saveSystem.js
+// src/systems/saveSystem.js
 import { state } from "../core/state.js";
 import { playerData, setPlayerData, ensurePlayerDataShape } from "./playerData.js";
 import { Tower } from "../entities/Tower.js";
@@ -14,7 +14,7 @@ export function getFullGameData() {
     totalPlayTime: state.totalPlayTime,
     totalZombiesKilled: state.totalZombiesKilled,
     placedTowers: state.towers.map(t => ({
-      x: t.x, y: t.y, type: t.type, level: t.level, totalInvest: t.totalInvest,
+      slotIndex: t.slot?.index, type: t.type, level: t.level, totalInvest: t.totalInvest,
     })),
   };
 }
@@ -41,18 +41,18 @@ export function applyFullGameData(data, onApplied) {
 
   if (data.placedTowers) {
     data.placedTowers.forEach(saved => {
-      const t = new Tower(saved.x, saved.y, saved.type);
+      const slot = state.buildSlots[saved.slotIndex];
+      if (!slot) return;
+
+      const t = new Tower(slot.x, slot.y, saved.type);
       t.level = saved.level;
       t.totalInvest = saved.totalInvest;
 
       for (let i = 1; i < t.level; i++) applyTowerUpgrade(t);
 
-      const slot = state.buildSlots.find(s => s.x === saved.x && s.y === saved.y);
-      if (slot) {
-        t.slot = slot;
-        slot.occupied = true;
-        slot.towerRef = t;
-      }
+      t.slot = slot;
+      slot.occupied = true;
+      slot.towerRef = t;
       state.towers.push(t);
     });
   }

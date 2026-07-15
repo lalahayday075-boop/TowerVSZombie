@@ -1,4 +1,4 @@
-// scr/systems/devState.js
+// src/systems/devState.js
 // แยกธงของโหมด dev ออกมาเป็น module เดี่ยว เพื่อให้ทุก entity (Tower/Zombie/Bullet)
 // import มาเช็คได้จุดเดียว ป้องกันบั๊กแบบเดิมที่ DEV_TOWER_IMMORTAL ถูกเช็คแค่บางที่ (AUDIT.md ข้อ 5)
 

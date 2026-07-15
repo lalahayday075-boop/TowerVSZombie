@@ -1,9 +1,10 @@
-// scr/systems/gachaSystem.js
-import { state } from "../core/state.js";
+// src/systems/gachaSystem.js
 import { GACHA_POOLS } from "../data/gachaPools.js";
 import { TOWER_TYPES } from "../data/towerTypes.js";
-import { saveGame } from "./saveSystem.js";
+import { api } from "./api.js";
+import { applyFullGameData, saveGame } from "./saveSystem.js";
 
+// ใช้แค่โชว์ "ไฮไลต์" บนการ์ดกาชา (การสุ่มจริงเกิดที่ server เท่านั้น)
 export function getBestTowerInPool(poolKey) {
   const pool = GACHA_POOLS[poolKey];
   if (!pool) return null;
@@ -21,37 +22,13 @@ export function getBestTowerInPool(poolKey) {
   return best;
 }
 
-function getRandomFromPool(towerList) {
-  const pool = [];
-  towerList.forEach(type => {
-    const rarity = TOWER_TYPES[type].rarity || 1;
-    for (let i = 0; i < rarity; i++) pool.push(type);
-  });
-  return pool[Math.floor(Math.random() * pool.length)];
-}
-
-// คืนค่า { ok, results, message } แทนการ alert() ตรงๆ เพื่อให้ UI layer เลือกวิธีแสดงผลเอง
-export function rollGacha(poolKey, amount = 1) {
-  const poolData = GACHA_POOLS[poolKey];
-  if (!poolData) return { ok: false, message: "ไม่พบตู้กาชานี้" };
-
-  const totalCost = poolData.cost * amount;
-
-  if (poolData.currency === "money") {
-    if (state.money < totalCost) return { ok: false, message: "เงินไม่พอ!" };
-    state.money -= totalCost;
-  } else {
-    if (state.diamonds < totalCost) return { ok: false, message: "เพชรไม่พอ!" };
-    state.diamonds -= totalCost;
+export async function rollGacha(poolKey, amount = 1) {
+  try {
+    const result = await api.rollGacha(poolKey, amount);
+    applyFullGameData(result.state);
+    saveGame();
+    return { ok: true, results: result.results.map(r => r.toUpperCase()) };
+  } catch (err) {
+    return { ok: false, message: err.message };
   }
-
-  const results = [];
-  for (let i = 0; i < amount; i++) {
-    const tower = getRandomFromPool(poolData.towers);
-    state.towerInventory[tower]++;
-    results.push(tower.toUpperCase());
-  }
-
-  saveGame();
-  return { ok: true, results };
 }

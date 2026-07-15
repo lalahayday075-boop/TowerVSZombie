@@ -1,4 +1,4 @@
-// scr/systems/unlockSystem.js
+// src/systems/unlockSystem.js
 import { state } from "../core/state.js";
 import { playerData, savePlayerData } from "./playerData.js";
 import { SKIN_DATABASE } from "../render/towerSkins/index.js";

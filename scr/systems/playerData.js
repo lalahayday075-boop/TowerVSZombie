@@ -1,4 +1,4 @@
-// scr/systems/playerData.js
+// src/systems/playerData.js
 export let playerData = {
   name: "Player",
   level: 1,
