@@ -14,9 +14,13 @@ const POOL_META = {
   diamond: { title: "ตู้เพชร", tier: "tier-diamond", badge: "PREMIUM" },
 };
 
+// สำคัญ: ห้ามใช้ state.money/state.diamonds ตรงๆ ตรงนี้ — ระหว่างเล่นเวฟอยู่ ตัวเลขสองตัวนั้นจะถูก
+// บวกเพิ่มแบบ "พรีวิว" ทันทีที่ฆ่าซอมบี้ (เพื่อความลื่นไหลของ HUD เท่านั้น ยังไม่ใช่เงินจริงที่ server ยืนยัน)
+// ถ้าเอามาเช็คว่าซื้อกาชาได้ไหม จะเจอเคส "จอบอกมีพอ" แต่กดสุ่มแล้ว server ตอบ "เงินไม่พอ" เพราะเงินก้อนนั้น
+// ยังไม่ถูกยืนยันจริง ให้ใช้ state.confirmedMoney/confirmedDiamonds ซึ่งอัปเดตเฉพาะตอน server ยืนยันแล้วเท่านั้น
 function canAfford(pool, amount) {
   const cost = pool.cost * amount;
-  return pool.currency === "diamond" ? state.diamonds >= cost : state.money >= cost;
+  return pool.currency === "diamond" ? state.confirmedDiamonds >= cost : state.confirmedMoney >= cost;
 }
 
 function statLine(t) {
@@ -64,8 +68,8 @@ function renderGachaContent() {
   container.innerHTML = `
     <div class="gacha-title">🎰 Gacha Center</div>
     <div class="gacha-currency">
-      <div class="gacha-currency-pill gacha-currency-money"><span>💰</span><span id="gachaMoney">${state.money}</span></div>
-      <div class="gacha-currency-pill gacha-currency-diamond"><span>💎</span><span id="gachaDiamond">${state.diamonds}</span></div>
+      <div class="gacha-currency-pill gacha-currency-money"><span>💰</span><span id="gachaMoney">${state.confirmedMoney}</span></div>
+      <div class="gacha-currency-pill gacha-currency-diamond"><span>💎</span><span id="gachaDiamond">${state.confirmedDiamonds}</span></div>
     </div>
     <div class="gacha-grid">
       ${Object.keys(POOL_META).map(createGachaCard).join("")}
@@ -210,6 +214,6 @@ export function closeGachaPage() {
 export function updateGachaMoney() {
   const moneyEl = document.getElementById("gachaMoney");
   const diamondEl = document.getElementById("gachaDiamond");
-  if (moneyEl) moneyEl.textContent = state.money;
-  if (diamondEl) diamondEl.textContent = state.diamonds;
+  if (moneyEl) moneyEl.textContent = state.confirmedMoney;
+  if (diamondEl) diamondEl.textContent = state.confirmedDiamonds;
 }

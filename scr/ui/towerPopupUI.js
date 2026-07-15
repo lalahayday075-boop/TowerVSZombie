@@ -6,6 +6,8 @@ import { SKIN_DATABASE } from "../render/towerSkins/index.js";
 import { getUpgradeCost, upgradeTower as doUpgradeTower, sellTower as doSellTower, placeTower } from "../systems/towerSystem.js";
 import { animateTowerPreview } from "./towerPreview.js";
 import { updateUI } from "./hud.js";
+import { api } from "../systems/api.js";
+import { applyFullGameData, saveGame } from "../systems/saveSystem.js";
 
 export function renderTowerPopup() {
   const list = document.getElementById("towerList");
@@ -131,7 +133,7 @@ export function refreshTowerInspectAll() {
   }
 
   if (!isMax && costData) {
-    const canAfford = costData.type === "money" ? state.money >= costData.cost : state.diamonds >= costData.cost;
+    const canAfford = costData.type === "money" ? state.confirmedMoney >= costData.cost : state.confirmedDiamonds >= costData.cost;
     upgradeCost.style.color = canAfford ? "white" : "red";
     if (resourceBox) resourceBox.style.color = canAfford ? "white" : "red";
     const upBtn = document.getElementById("popupUpgradeBtn");
@@ -140,8 +142,8 @@ export function refreshTowerInspectAll() {
 
   if (!isMax && costData && resourceBox) {
     resourceBox.innerHTML = costData.type === "money"
-      ? `💰 เงินที่มี: ${state.money}`
-      : `💎 เพชรที่มี: ${state.diamonds}`;
+      ? `💰 เงินที่มี: ${state.confirmedMoney}`
+      : `💎 เพชรที่มี: ${state.confirmedDiamonds}`;
   }
 }
 
@@ -221,7 +223,7 @@ export function openTowerInspect(tower) {
         ? `<div class="section-title">⭐ เลเวลสูงสุดแล้ว</div>`
         : `<div class="section-title" id="popupUpgradeCost">⬆ ค่าอัปเกรด: ${costData.type === "money" ? `💰 ${costData.cost}` : `💎 ${costData.cost}`}</div>`
       }
-      ${!isMax ? `<div style="margin-top:6px;" id="popupPlayerResource">${costData.type === "money" ? `💰 เงินที่มี: ${state.money}` : `💎 เพชรที่มี: ${state.diamonds}`}</div>` : ""}
+      ${!isMax ? `<div style="margin-top:6px;" id="popupPlayerResource">${costData.type === "money" ? `💰 เงินที่มี: ${state.confirmedMoney}` : `💎 เพชรที่มี: ${state.confirmedDiamonds}`}</div>` : ""}
       <button class="action-btn upgrade-btn" id="popupUpgradeBtn" ${isMax ? "disabled" : ""}>⬆ อัปเกรด</button>
       <button class="action-btn sell-btn" id="popupSellBtn">🎒 คืนเข้ากระเป๋า</button>
       <button class="action-btn skin-btn" id="popupSkinBtn">🎨 เปลี่ยนสกินป้อมนี้</button>
@@ -315,10 +317,25 @@ export function closeTowerSkinSelector() {
   document.getElementById("towerSkinSelector")?.remove();
 }
 
-export function equipTowerSkin(type, name) {
+export async function equipTowerSkin(type, name) {
   if (!playerData.skins.unlocked[type]?.includes(name)) return;
-  playerData.skins.equipped[type] = name;
+
+  const prevEquipped = playerData.skins.equipped[type];
+  playerData.skins.equipped[type] = name; // optimistic update ให้ UI ตอบสนองไว
   savePlayerData();
   if (state.selectedTower) openTowerInspect(state.selectedTower);
   closeTowerSkinSelector();
+
+  try {
+    // เดิมโค้ดนี้เซฟแค่ลง localStorage ฝั่งเครื่อง ไม่เคยยิงไปเก็บที่ server เลย
+    // ทำให้ /api/state ตอน login ใหม่ทับค่ากลับเป็นสกินเดิม (บั๊กสกินรีเซ็ตทุกครั้งที่เข้าเกมใหม่)
+    const res = await api.equipTowerSkin(type, name);
+    applyFullGameData(res.state);
+    saveGame();
+  } catch (err) {
+    playerData.skins.equipped[type] = prevEquipped; // ยิงไม่สำเร็จ ย้อนกลับค่าเดิม
+    savePlayerData();
+    if (state.selectedTower) openTowerInspect(state.selectedTower);
+    console.error("[equipTowerSkin] บันทึกสกินป้อมไม่สำเร็จ:", err);
+  }
 }
