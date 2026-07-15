@@ -234,14 +234,46 @@ export function openTowerInspect(tower) {
   document.querySelectorAll("[data-priority]").forEach(b => b.onclick = () => setTowerPriority(b.dataset.priority));
   document.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => setTargetMode(b.dataset.mode));
   document.getElementById("popupUpgradeBtn").onclick = () => doUpgradeTower(refreshTowerInspectAll);
-  document.getElementById("popupSellBtn").onclick = () => doSellTower(true, refreshTowerInspectAll, closeTowerInspect);
+  document.getElementById("popupSellBtn").onclick = () => openSellConfirm(tower);
   document.getElementById("popupSkinBtn").onclick = openTowerSkinSelector;
   document.getElementById("popupCloseBtn").onclick = closeTowerInspect;
+}
+
+export function openSellConfirm(tower) {
+  closeSellConfirm();
+
+  const overlay = document.createElement("div");
+  overlay.id = "sellConfirmPopup";
+  overlay.className = "confirm-overlay";
+  overlay.innerHTML = `
+    <div class="confirm-box">
+      <div class="confirm-icon">🎒</div>
+      <div class="confirm-title">คืนป้อมเข้ากระเป๋า?</div>
+      <div class="confirm-text">${tower.type.toUpperCase()} เลเวล ${tower.level} จะถูกถอดออกจากสนามและกลับเข้ากระเป๋า</div>
+      <div class="confirm-actions">
+        <button class="confirm-btn confirm-btn-cancel" id="sellConfirmCancel">ยกเลิก</button>
+        <button class="confirm-btn confirm-btn-danger" id="sellConfirmOk">ยืนยันคืนป้อม</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  document.getElementById("sellConfirmCancel").onclick = closeSellConfirm;
+  document.getElementById("sellConfirmOk").onclick = () => {
+    closeSellConfirm();
+    doSellTower(false, null, closeTowerInspect);
+  };
+  overlay.onclick = e => { if (e.target === overlay) closeSellConfirm(); };
+}
+
+export function closeSellConfirm() {
+  document.getElementById("sellConfirmPopup")?.remove();
 }
 
 export function closeTowerInspect() {
   state.selectedTower = null;
   document.getElementById("towerInspectPopup").style.display = "none";
+  closeSellConfirm();
 }
 
 export function openTowerSkinSelector() {
