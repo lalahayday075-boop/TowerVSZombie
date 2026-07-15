@@ -39,7 +39,7 @@
   // เลือกได้ว่า element ไหน "ตั้งใจให้เลื่อน (scroll) ได้" เช่น รายการในป๊อปอัพต่างๆ
   const SCROLLABLE_SELECTOR =
     "#towerInspectPopup, .tower-list, .panel, .evolve-list, .gacha-box, " +
-    ".zombie-scroll-area, .tower-skin-list, #mapThemeList, .gacha-info-box";
+    ".zombie-scroll-area, .zombie-tabs, .tower-skin-list, #mapThemeList, .gacha-info-box";
 
   function isInsideScrollable(el) {
     return !!(el && el.closest && el.closest(SCROLLABLE_SELECTOR));
