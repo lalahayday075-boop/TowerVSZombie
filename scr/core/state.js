@@ -23,6 +23,7 @@ export const state = {
 
   wave: 1,
   waveSpawning: false,
+  waveCompleting: false,
   spawnTimer: null,
   zombiesTotalThisWave: 0,
   zombiesKilledThisWave: 0,

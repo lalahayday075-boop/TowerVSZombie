@@ -8,7 +8,7 @@ import { updateBlood } from "../systems/bloodSystem.js";
 import { updateDamagePopups, drawDamagePopups } from "../systems/damageSystem.js";
 import { updateMoneyPopups, updateDiamondPopups } from "../systems/dropSystem.js";
 import { drawMapTheme } from "../render/mapThemes.js";
-import { spawnWave, failWave } from "../systems/waveController.js";
+import { spawnWave, failWave, completeWaveOnServer } from "../systems/waveController.js";
 import { updateUI } from "../ui/hud.js";
 import { refreshTowerInspectAll, refreshTowerInspectLive } from "../ui/towerPopupUI.js";
 import { refreshProfileUI } from "../ui/profileUI.js";
@@ -85,11 +85,19 @@ function update(time) {
     if (b.hit) state.bullets.splice(i, 1);
   }
 
-  if (state.zombies.length === 0 && !state.waveSpawning) {
-    state.wave++;
-    state.waveTimeLeft = WAVE_TIME_LIMIT;
-    updateUI();
-    spawnWave();
+  // เดิม: ตอนซอมบี้หมดสนาม client แค่ state.wave++ เอง แล้ว spawnWave() เวฟถัดไปทันที
+  // โดยไม่เคยเรียก /api/wave/complete เลย — เงิน/เพชร/เลขเวฟที่ผู้เล่นได้ระหว่างเวฟนั้นเลย
+  // เป็นแค่ "พรีวิว" ที่ไม่เคยถูกบันทึกจริงที่ server พอมี request อื่นทับ state มาทีหลัง
+  // (หรือรีเฟรชหน้า/redeploy) ค่าที่ยังไม่ยืนยันจะหายไปหมด ดูเหมือนเกม "ไม่เซฟ"
+  // ตอนนี้ต้องรอ server ยืนยัน (และเขียนลง DB) ก่อนเสมอ ถึงจะขึ้นเวฟถัดไปได้
+  if (state.zombies.length === 0 && !state.waveSpawning && !state.waveCompleting) {
+    state.waveCompleting = true;
+    completeWaveOnServer(() => {
+      state.waveCompleting = false;
+      state.waveTimeLeft = WAVE_TIME_LIMIT;
+      updateUI();
+      spawnWave();
+    });
   }
 
   requestAnimationFrame(update);
