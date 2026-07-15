@@ -2,19 +2,21 @@
 
 เกม Tower Defense vs Zombie เขียนใหม่ทั้งหมด (ES modules) — ดูรายละเอียดบั๊กที่แก้ไปได้ใน `AUDIT.md`
 
-เกมเป็น **client-side ล้วน** (เซฟข้อมูลผู้เล่นลง `localStorage` ในเบราว์เซอร์) ตัว `server.js` มีหน้าที่แค่
-เสิร์ฟไฟล์ static ให้ Railway รันเป็น service ได้เท่านั้น ไม่มี dependency ภายนอกเลย (ใช้ Node built-in
-module ทั้งหมด) รันได้ทันทีโดยไม่ต้อง `npm install`
+เกมเป็นแบบ **server-authoritative**: ผู้เล่นต้องล็อกอิน (ชื่อ + PIN) ก่อนเล่น ข้อมูล (เงิน/เพชร/ป้อม/สกิน)
+เก็บอยู่บน server (Postgres) ไม่ใช่ localStorage ฝั่งเดียวอีกต่อไป ตัว `backend/server.js` เป็น Express
+server ที่เสิร์ฟทั้ง REST API (`/api/*`) และไฟล์หน้าเกม (static) จากโฟลเดอร์เดียวกัน
 
 ## รันเล่นในเครื่องตัวเอง
 
+ต้องมี Postgres ก่อน (ตั้งค่าตัวแปรแวดล้อม `DATABASE_URL` ให้ชี้ไปที่ database ที่จะใช้ เช่น
+`postgres://user:pass@localhost:5432/tvz`) แล้วรัน:
+
 ```bash
+npm install
 npm start
-# หรือ
-node server.js
 ```
 
-แล้วเปิด http://localhost:3000
+แล้วเปิด http://localhost:3000 (ครั้งแรกที่รันจะสร้างตาราง schema ให้อัตโนมัติ)
 
 ## ขึ้น GitHub
 
@@ -54,7 +56,7 @@ railway up
 
 ```
 index.html          หน้าเกมหลัก
-server.js           static file server (Node http ล้วน ไม่มี dependency)
+backend/            Express server: REST API (/api/*) + เสิร์ฟไฟล์หน้าเกม + Postgres
 assets/*.css         สไตล์ (คัดลอกจากของเดิม ไม่ได้แก้)
 scr/data/            ค่าคงที่: ป้อม, เวฟ, กาชา, evolve tree
 scr/core/            state กลาง, game loop, canvas ref
