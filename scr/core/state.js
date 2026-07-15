@@ -17,6 +17,14 @@ export const state = {
   money: 100,
   diamonds: 0,
 
+  // ยอดเงิน/เพชร "ที่ยืนยันจริงจาก server" ล่าสุด (อัปเดตเฉพาะตอน applyFullGameData เท่านั้น)
+  // ต่างจาก state.money/state.diamonds ด้านบนที่ระหว่างเล่นเวฟจะถูกบวกเพิ่มแบบ "พรีวิว" ทันทีที่ฆ่าซอมบี้
+  // (ดูคอมเมนต์ใน waveController.js) เพื่อความลื่นไหลของ HUD เท่านั้น ไม่ใช่ยอดจริง
+  // ใช้ confirmedMoney/confirmedDiamonds เวลาต้อง "เช็คว่าจ่ายได้ไหม" (เช่นกาชา) กันเคสยอด
+  // ในเวฟที่ยังไม่จบโชว์ว่าเงินพอ แต่ server ปฏิเสธเพราะจริงๆ ยังไม่ได้เงินก้อนนั้น
+  confirmedMoney: 100,
+  confirmedDiamonds: 0,
+
   towerInventory: {},
   totalPlayTime: 0,
   totalZombiesKilled: 0,
