@@ -1,7 +1,7 @@
 // backend/data/towerFormulas.js
 // หมายเหตุ: ใช้ TOWER_TYPES ตัวเดียวกับฝั่ง client (import ตรงจาก src/data) เพื่อไม่ให้ตัวเลขเพี้ยนกัน
 // ส่วนสูตรค่าอัพเกรดคัดลอกมาจาก src/systems/towerSystem.js (getUpgradeCost) แค่ปรับให้เป็น pure function
-import { TOWER_TYPES, MAX_TOWER_LEVEL } from "../../src/data/towerTypes.js";
+import { TOWER_TYPES, MAX_TOWER_LEVEL } from "../../scr/data/towerTypes.js";
 
 export { TOWER_TYPES, MAX_TOWER_LEVEL };
 

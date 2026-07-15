@@ -1,6 +1,6 @@
 // backend/data/gachaFormulas.js
-import { GACHA_POOLS } from "../../src/data/gachaPools.js";
-import { TOWER_TYPES } from "../../src/data/towerTypes.js";
+import { GACHA_POOLS } from "../../scr/data/gachaPools.js";
+import { TOWER_TYPES } from "../../scr/data/towerTypes.js";
 
 export { GACHA_POOLS };
 
