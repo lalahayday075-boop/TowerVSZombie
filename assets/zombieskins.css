@@ -87,9 +87,12 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 10px;
   margin-bottom: 8px;
   scrollbar-width: none;
+  min-width: 0;
+  width: 100%;
 }
 
 .zombie-tabs::-webkit-scrollbar { display: none; }
