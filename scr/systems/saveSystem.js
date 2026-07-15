@@ -45,10 +45,16 @@ export function applyFullGameData(data, onApplied) {
       if (!slot) return;
 
       const t = new Tower(slot.x, slot.y, saved.type);
-      t.level = saved.level;
       t.totalInvest = saved.totalInvest;
 
-      for (let i = 1; i < t.level; i++) applyTowerUpgrade(t);
+      // บั๊กเดิม: เขียน t.level = saved.level ตรงๆ ก่อน แล้วให้ for-loop เช็คขอบเขตด้วย "t.level" เอง
+      // แต่ applyTowerUpgrade() ข้างในก็ทำ tower.level++ ด้วย ทำให้ขอบเขตของ loop ขยับขึ้นทุกรอบที่ loop วิ่ง
+      // (เปรียบเหมือนวิ่งไล่จับหางตัวเอง) ผลคือ loop ไม่มีวันจบตามจำนวนที่ตั้งใจ วิ่งยาวไปจนกว่า
+      // applyTowerUpgrade จะเจอ maxLevel แล้ว return เฉยๆ — ป้อมเลยเลเวลพุ่งไปสุด (maxLevel) ทันที
+      // ทุกครั้งที่ applyFullGameData ทำงาน (คืออัปเกรด/วางป้อม/ขายป้อมทุกครั้ง เพราะ sync ป้อมทั้งหมดใหม่)
+      // แก้โดยตรึงเป้าหมายเป็นค่าคงที่ (targetLevel) แยกจาก t.level ที่กำลังถูกไล่บวกทีละ 1 จริงๆ
+      const targetLevel = saved.level;
+      for (let i = 1; i < targetLevel; i++) applyTowerUpgrade(t);
 
       t.slot = slot;
       slot.occupied = true;
