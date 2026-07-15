@@ -57,9 +57,11 @@ export function buildSlotLayout() {
   const startX = 60;
   const gapX = 70;
   const rowY = [640, 720];
+  let index = 0;
   for (let r = 0; r < 2; r++) {
     for (let c = 0; c < 5; c++) {
-      slots.push({ x: startX + c * gapX, y: rowY[r], occupied: false, towerRef: null });
+      slots.push({ index, x: startX + c * gapX, y: rowY[r], occupied: false, towerRef: null });
+      index++;
     }
   }
   return slots;
