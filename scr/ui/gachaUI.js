@@ -40,9 +40,9 @@ export function initGachaUI() {
     <button class="gacha-btn gacha-close" id="closeGachaBtn">ปิด</button>
   `;
 
-  container.addEventListener("click", e => {
+  container.addEventListener("click", async e => {
     if (e.target.dataset.pool) {
-      const result = rollGacha(e.target.dataset.pool, Number(e.target.dataset.amount));
+      const result = await rollGacha(e.target.dataset.pool, Number(e.target.dataset.amount));
       updateGachaMoney();
       if (!result.ok) alert(result.message);
       else alert(`ได้: ${result.results.join(", ")}`);
