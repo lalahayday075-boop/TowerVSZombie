@@ -5,7 +5,7 @@
 // เดิม DEV_MODE = true ถูกปล่อยติดไปด้วย (AUDIT.md ข้อ 3) → ปรับ default เป็น false
 // เปิดได้จากคอนโซล/ตั้งค่าตอน dev เอง ไม่ต้องแก้ไฟล์นี้
 export const devState = {
-  DEV_MODE: true,
+  DEV_MODE: false,
   DEV_PAUSE: false,
   DEV_TOWER_IMMORTAL: false,
   GAME_SPEED: 1,
