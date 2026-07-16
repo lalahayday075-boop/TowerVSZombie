@@ -10,20 +10,22 @@ export const waveRouter = Router();
 
 // เดิม (client-only) ใช้สุ่มดรอปเพชรต่อตัวตอนฆ่า — ที่นี่ทำสูตรเดียวกันแบบ pure function
 // (คัดลอกมาจาก src/systems/dropSystem.js เพราะไฟล์นั้นมี DOM-related popup class ปนอยู่ ไม่สะดวก import ตรงๆ)
+// v2: อัตรานี้ต้องตรงกับ src/systems/dropSystem.js เป๊ะๆ เสมอ (ดูหมายเหตุ v2 ที่ไฟล์นั้นสำหรับเหตุผล)
 function rollDiamondDrop(isBoss) {
   const r = Math.random() * 100;
   if (!isBoss) {
-    if (r < 83) return 0;
-    if (r < 93) return 1;
-    if (r < 98) return 2;
-    if (r < 99.99) return 3;
-    return 5;
-  } else {
     if (r < 70) return 0;
-    if (r < 91) return 1;
-    if (r < 96) return 2;
-    if (r < 99) return 3;
-    if (r < 99.999) return 5;
+    if (r < 86) return 1;
+    if (r < 95) return 2;
+    if (r < 99.5) return 3;
+    if (r < 99.99) return 5;
+    return 10;
+  } else {
+    if (r < 55) return 0;
+    if (r < 78) return 1;
+    if (r < 90) return 2;
+    if (r < 97) return 3;
+    if (r < 99.9) return 5;
     return 10;
   }
 }
