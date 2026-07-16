@@ -52,13 +52,20 @@ export const ENEMY_BASE = {
     baseSpeed: 88, speedMax: 225, armorBase: 2, armorPer10: 1,
     countBase: 1, countEvery: 30, countMax: 4,
   },
+  // v2 หมายเหตุ: hpGrowth/dmgGrowth ของบอสเดิม (1.042/1.020) สูงกว่าศัตรูปกติทุกตัวเยอะเกินไป
+  // (ศัตรูปกติสูงสุดอยู่แค่ 1.035/1.017) พอ compound ยาวๆ เป็นร้อยเวฟ บอสเลยแซงหน้าศัตรูปกติแบบไม่หยุด:
+  // สัดส่วน HP ของบอสเทียบกับ HP รวมทั้งเวฟ ไต่จาก ~60% ช่วงกลางเกมไปเป็น ~90%+ ตอนเวฟ 280-300
+  // และ "อัตราส่วนความยากเวฟบอส เทียบกับเวฟปกติก่อนหน้า" ก็ไต่ไม่หยุดตาม (2.9 เท่าที่เวฟ 60 -> 9.7 เท่าที่เวฟ 300)
+  // กลายเป็นว่าเวฟบอสยิ่งเล่นยิ่งเป็นกำแพงที่ทำนายไม่ได้ ไม่ใช่ความยากที่ไต่ขึ้นสม่ำเสมอแบบตั้งใจ
+  // แก้โดยลดอัตราทบต้นของบอสให้ใกล้เคียงศัตรูปกติที่โหดสุดแทน (แต่ยังสูงกว่านิดหน่อยเพื่อให้ยังรู้สึกว่าบอสพิเศษ)
+  // ผลคือสัดส่วน HP บอส/เวฟรวม จะนิ่งอยู่ ~35-45% และอัตราส่วนความยาก นิ่งอยู่ ~1.6-2 เท่าตลอดเกม แทนที่จะพุ่งไม่หยุด
   boss_ground: {
-    unlockWave: 10, baseHp: 1500, hpGrowth: 1.042, baseDmg: 32, dmgGrowth: 1.020,
+    unlockWave: 10, baseHp: 1500, hpGrowth: 1.034, baseDmg: 32, dmgGrowth: 1.018,
     baseSpeed: 55, speedMax: 200, armorBase: 6, armorPer10: 1,
     countBase: 1, countEvery: 999, countMax: 1,
   },
   boss_air: {
-    unlockWave: 30, baseHp: 1100, hpGrowth: 1.042, baseDmg: 40, dmgGrowth: 1.020,
+    unlockWave: 30, baseHp: 1100, hpGrowth: 1.034, baseDmg: 40, dmgGrowth: 1.018,
     baseSpeed: 65, speedMax: 210, armorBase: 3, armorPer10: 1,
     countBase: 1, countEvery: 999, countMax: 1,
   },

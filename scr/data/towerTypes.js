@@ -70,8 +70,13 @@ const BASE_TOWERS = {
     cost: 9500, range: 165, cooldown: 0.14, damage: 22, hp: 1000,
     color: "#e84393", target: "both", rarity: 4,
   },
+  // v2 หมายเหตุ: damage เดิม 2600 ทำให้ DPS ตอนแม็กซ์เลเวล (single-target ~6,178 / full-chain ~15,542)
+  // แรงกว่า diamond_cannon แม็กซ์เลเวล (~238.7 DPS) ถึง 26-65 เท่า ทั้งที่แพงกว่ากันแค่ ~22 เท่า (คิดจาก
+  // เพชรรวมที่ต้องใช้ทั้งสุ่ม+อัพเกรดจนแม็กซ์) ต่างจากป้อมคู่ diamond ตัวอื่นในเกมเยอะเกินไป
+  // ลดเหลือ 1300 (ครึ่งเดียว) ให้ยังเป็นป้อมแรงที่สุดในเกมชัดเจน (~12x/~33x diamond_cannon แม็กซ์เลเวล)
+  // สมกับหายากที่สุด (rarity 3/73 ในพูลเพชร) แต่ไม่หลุดสเกลจนป้อมเพชรตัวอื่นดูไร้ค่าไปเลย
   pomegranate_storm: {
-    cost: 0, diamondCost: 450, range: 230, cooldown: 2.0, damage: 2600, hp: 4000,
+    cost: 0, diamondCost: 450, range: 230, cooldown: 2.0, damage: 1300, hp: 4000,
     color: "#FF0606", target: "both", maxLevel: 10,
     chainCount: 5, chainRange: 240, chainDecay: 0.65, rarity: 3,
   },
