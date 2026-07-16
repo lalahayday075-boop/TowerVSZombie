@@ -43,7 +43,12 @@ export class Zombie {
     this.bossPhase = 1;
 
     this.attackMode = attackMode;
-    this.attackRange = attackMode === "melee" ? 40 : attackMode === "ranged" ? 160 : 280;
+    // v2 หมายเหตุ: ของเดิม lightning ระยะ 280 แต่ป้อมแรงสุด (aimRange = range*1.25) ในเกมได้แค่ pomegranate_storm
+    // ที่ 287.5 เท่านั้น (ป้อมอื่นที่ตี ground/both ได้ทุกตัวไม่ถึง 280 เลย สูงสุดคือ storm ที่ 262.5)
+    // แปลว่า ground_lightning/air_lightning ยืนยิงจากระยะที่ป้อมแทบทุกตัวสวนกลับไม่ได้เลย กลายเป็นตัวปั่นดาเมจฟรี
+    // ที่ไม่มีทางสู้ตั้งแต่เวฟ 70 เป็นต้นไป — ลดเหลือ 170 ให้ยังไกลกว่า "ranged"(160) สมกับเป็นด่านถัดไป
+    // แต่ป้อมสาย both เกรดกลางๆ (diamond_cannon/lightning/storm/vanguard aimRange 200-262.5) ยิงโต้ได้จริง
+    this.attackRange = attackMode === "melee" ? 40 : attackMode === "ranged" ? 160 : 170;
     this.stopRange = this.attackRange;
     this.attackCooldown = attackMode === "lightning" ? 2.1 : attackMode === "ranged" ? 1.5 : 0.5;
     this.attackTimer = 0;
